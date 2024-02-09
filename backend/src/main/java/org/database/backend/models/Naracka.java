@@ -24,10 +24,6 @@ public class Naracka {
     @JoinColumn(name = "potrosuvac_id")
     private Potrosuvac potrosuvac;
 
-    @ManyToMany
-    @JoinColumn(name = "restoran_id")
-    private List<Restoran> restoran;
-
     @ManyToOne
     @JoinColumn(name = "vozac_id")
     private Vozac vozac;
@@ -35,4 +31,11 @@ public class Naracka {
     @ManyToOne
     @JoinColumn(name = "admin_id")
     private Admin admin;
+
+    @ManyToMany
+    @JoinTable(
+            name = "Naracka_sodrzi_MenuItem",
+            joinColumns = @JoinColumn(name = "naracka_id"),
+            inverseJoinColumns = @JoinColumn(name = "menuItem_id"))
+    List<MenuItem> narackaItems;
 }

@@ -1,6 +1,6 @@
 package org.database.backend.services.impl;
 
-import org.database.backend.models.Menu_item;
+import org.database.backend.models.MenuItem;
 import org.database.backend.repositories.MenuItemRepository;
 import org.database.backend.services.MenuItemService;
 import org.springframework.stereotype.Service;
@@ -17,18 +17,18 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public List<Menu_item> findAllMenuItems() {
+    public List<MenuItem> findAllMenuItems() {
         return menuItemRepository.findAll();
     }
 
     @Override
-    public Optional<Menu_item> findMenuItemById(Integer id) {
+    public Optional<MenuItem> findMenuItemById(Integer id) {
         return menuItemRepository.findById(id);
     }
 
     @Override
-    public Menu_item saveMenuItem(Menu_item menuItem) {
-        Menu_item newMenuItem = new Menu_item();
+    public MenuItem saveMenuItem(MenuItem menuItem) {
+        MenuItem newMenuItem = new MenuItem();
         newMenuItem.setCena(menuItem.getCena());
         newMenuItem.setIme(menuItem.getIme());
         newMenuItem.setRestoran(menuItem.getRestoran());
@@ -36,10 +36,10 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public Menu_item editMenuItem(Integer id, Menu_item menuItem) {
-        Optional<Menu_item> menuItem1 = findMenuItemById(id);
+    public MenuItem editMenuItem(Integer id, MenuItem menuItem) {
+        Optional<MenuItem> menuItem1 = findMenuItemById(id);
         if (menuItem1.isPresent()){
-            Menu_item updateMenuItem = menuItem1.get();
+            MenuItem updateMenuItem = menuItem1.get();
             updateMenuItem.setCena(menuItem.getCena());
             updateMenuItem.setIme(menuItem.getIme());
             updateMenuItem.setRestoran(menuItem.getRestoran());

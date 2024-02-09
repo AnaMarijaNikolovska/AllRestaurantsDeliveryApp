@@ -21,24 +21,35 @@ public class Korisnik implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "korisnik_id")
     Integer id;
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "pword", nullable = false)
     private String password;
 
-    Role role;
-
+    @Transient
     boolean isAccountNonExpired = true;
 
+    @Transient
     boolean isAccountNonLocked = true;
 
+    @Transient
     boolean isCredentialsNonExpired = true;
 
+    @Transient
     boolean isEnabled = true;
+
+    @Transient
+    Role role;
+
+    public Korisnik(String email, String username, String password) {
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

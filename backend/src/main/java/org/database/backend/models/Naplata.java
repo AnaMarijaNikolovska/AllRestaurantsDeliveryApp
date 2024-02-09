@@ -25,4 +25,7 @@ public class Naplata {
     @JoinColumn(name = "potrosuvac_id")
     private Potrosuvac potrosuvac;
 
+    @OneToOne
+    @JoinColumn(name = "naracka_id ")
+    private Naracka naracka;
 }

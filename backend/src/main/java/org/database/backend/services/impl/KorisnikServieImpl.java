@@ -2,6 +2,10 @@ package org.database.backend.services.impl;
 
 import org.database.backend.models.Korisnik;
 import org.database.backend.models.Potrosuvac;
+import org.database.backend.models.Vozac;
+import org.database.backend.models.dto.UserDto;
+import org.database.backend.models.dto.UserLoginDto;
+import org.database.backend.models.enums.Role;
 import org.database.backend.repositories.*;
 import org.database.backend.services.KorisnikService;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -32,5 +36,46 @@ public class KorisnikServieImpl implements KorisnikService {
 
         AuthorityUtils.createAuthorityList(String.valueOf(user.getRole()));
         return user;
+    }
+
+    @Override
+    public Integer save(UserDto userDto) {
+        if (userDto == null) {
+            return null;
+        }
+
+        Korisnik korisnik = new Korisnik(userDto.getEmail(), userDto.getUsername(), userDto.getPassword());
+        korisnikRepository.save(korisnik);
+
+        switch (userDto.getRole()) {
+            case DRIVER: {
+
+                Vozac vozac = new Vozac();
+                vozac.setKorisnik(korisnik);
+
+                vozacRepository.save(vozac);
+                break;
+            }
+            case USER: {
+                Potrosuvac potrosuvac = new Potrosuvac();
+                potrosuvac.setKorisnik(korisnik);
+                potrosuvac.setAddress(userDto.getAddress());
+                potrosuvac.setPhoneNumber(userDto.getPhoneNumber());
+
+                potrosuvacRepository.save(potrosuvac);
+                break;
+            }
+        }
+
+        return korisnik.getId();
+    }
+
+    @Override
+    public UserDetails loginUser(UserLoginDto userLoginDto) throws Exception {
+        if (userLoginDto.getUsername().isEmpty() || userLoginDto.getPassword().isEmpty()) {
+            throw new Exception("Invalid request");
+        }
+
+        return loadUserByUsername(userLoginDto.getUsername());
     }
 }

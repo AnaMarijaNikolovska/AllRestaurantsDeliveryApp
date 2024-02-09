@@ -1,16 +1,15 @@
 package org.database.backend.services;
 
-import org.database.backend.models.Menu_item;
-import org.database.backend.models.Naplata;
+import org.database.backend.models.MenuItem;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface MenuItemService {
-    List<Menu_item> findAllMenuItems();
-    Optional<Menu_item> findMenuItemById(Integer id);
+    List<MenuItem> findAllMenuItems();
+    Optional<MenuItem> findMenuItemById(Integer id);
 //    List<Menu_item> findMenuItemsByRestoran();
-    Menu_item saveMenuItem(Menu_item menuItem);
-    Menu_item editMenuItem(Integer id, Menu_item menuItem);
+    MenuItem saveMenuItem(MenuItem menuItem);
+    MenuItem editMenuItem(Integer id, MenuItem menuItem);
     void deleteMenuItem(Integer id);
 }

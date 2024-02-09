@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -27,4 +29,11 @@ public class Restoran {
     @ManyToOne
     @JoinColumn(name = "manager_id")
     private Manager manager;
+
+    @ManyToMany
+    @JoinTable(
+            name = "restoran_naracka",
+            joinColumns = @JoinColumn(name = "restoran_id"),
+            inverseJoinColumns = @JoinColumn(name = "naracka_id"))
+    List<Naracka> naracki;
 }

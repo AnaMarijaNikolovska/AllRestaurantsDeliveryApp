@@ -19,7 +19,7 @@ public class Vozilo {
     @Column(name = "tip")
     String tip;
 
-    @Column(name = "br_telefon")
+    @Column(name = "br_registracija", nullable = false)
     String br_telefon;
 
 }

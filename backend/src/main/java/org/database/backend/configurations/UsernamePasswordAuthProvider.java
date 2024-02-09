@@ -1,4 +1,5 @@
 package org.database.backend.configurations;
+
 import org.database.backend.services.KorisnikService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
