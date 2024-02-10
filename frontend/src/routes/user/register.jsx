@@ -2,7 +2,7 @@ import {useState} from "react";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {toast} from "react-toastify";
 import {RegisterUser} from "../../services/user-service";
-import {Link, redirect} from "react-router-dom";
+import {Link, redirect, useNavigate} from "react-router-dom";
 import {Avatar, Button, Container, Grid, Paper, TextField, Typography} from "@mui/material";
 import ChooseRole from "../../components/modals/role-modal";
 
@@ -14,7 +14,7 @@ const Register = (props) => {
         email: "",
         role: props?.location?.state?.role
     });
-
+   const navigate = useNavigate();
     const chooseRole = role => {
         setUser({...user, role: role});
     }
@@ -28,7 +28,7 @@ const Register = (props) => {
 
         RegisterUser(user)
             .then(() => {
-                redirect("login");
+                navigate("/login");
                 toast("Successfuly registered")
             })
     }

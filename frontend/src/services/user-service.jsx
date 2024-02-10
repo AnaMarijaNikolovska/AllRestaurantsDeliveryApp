@@ -4,9 +4,9 @@ const usersRoute = "/users";
 
 const UserRole = {
     Potrosuvac: 'USER',
-    Vozac: 'VOZAC',
+    Vozac: 'DRIVER',
     Admin: 'ADMIN',
-    Menager: 'MENAGER'
+    Menager: 'MANAGER'
 }
 
 const BasicAuth = (username, password) => {
