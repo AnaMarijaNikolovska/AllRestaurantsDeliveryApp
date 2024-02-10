@@ -1,7 +1,9 @@
 import React, {useState} from "react";
 import {useAuthContext} from "../../configurations/AuthContext";
-import {Grid, Typography} from "@mui/material";
+import {Button, Grid, Typography} from "@mui/material";
 import {useLoaderData} from "react-router-dom";
+import EditRestorantModal from "../../components/modals/restorant-modal";
+import {UserRole} from "../../services/user-service";
 
 const RestorantDetails = ({id}) => {
     const {isAuthorized} = useAuthContext();
@@ -23,10 +25,16 @@ const RestorantDetails = ({id}) => {
             </Typography>
             <hr className={"horizontal-fancy"}/>
 
-            {/*{openUpdateModal &&*/}
-            {/*    <CreateEditLocationModal location={location} open={openUpdateModal}*/}
-            {/*                             onClose={() => setOpenUpdateModal(false)}/>*/}
+            {/*{isAuthorized(restorant.managerId) &&*/}
+            <Button onClick={() => setOpenUpdateModal(true)}>
+                Update Restorant
+            </Button>
             {/*}*/}
+
+            {openUpdateModal &&
+                <EditRestorantModal restorant={restorant} open={openUpdateModal}
+                                    onClose={() => setOpenUpdateModal(false)}/>
+            }
 
         </Grid>
     )

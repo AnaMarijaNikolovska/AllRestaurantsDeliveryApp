@@ -1,6 +1,7 @@
 package org.database.backend.controllers;
 
 import org.database.backend.models.Restoran;
+import org.database.backend.models.dto.RestorantDto;
 import org.database.backend.services.RestoranService;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,17 @@ public class RestorantController {
     }
 
     @PostMapping
-    public Restoran create(@RequestBody Restoran restoran) {
+    public Integer create(@RequestBody RestorantDto restoran) throws Exception {
         return restoranService.saveRestoran(restoran);
+    }
+
+    @PostMapping("{id}")
+    public void update(@PathVariable Integer id, @RequestBody RestorantDto restoran) throws Exception {
+        restoranService.editRestoran(id, restoran);
+    }
+
+    @DeleteMapping("{id}")
+    public void delete(@PathVariable Integer id) throws Exception {
+        restoranService.deleteRestoran(id);
     }
 }

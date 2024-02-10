@@ -2,7 +2,7 @@ import axios from "axios";
 
 const restorantRoute = "/restorants";
 
-const getAllRestaurants = async () => {
+const GetAllRestaurants = async () => {
     try {
         const response = await axios.get(restorantRoute);
         return response.data;
@@ -12,7 +12,7 @@ const getAllRestaurants = async () => {
     }
 };
 
-const getRestourant = async (id) => {
+const GetRestourant = async (id) => {
     try {
         const response = await axios.get(`${restorantRoute}/${id}`);
         return response.data;
@@ -22,5 +22,25 @@ const getRestourant = async (id) => {
     }
 };
 
+const CreateRestorant = async (formData) => {
+    try {
+        const response = await axios.post(`${restorantRoute}`, formData);
+        return response.data;
+    } catch (error) {
+        console.error("Error occured", error);
+        throw error; // Re-throw the error to be handled by the caller
+    }
+};
 
-export {getAllRestaurants, getRestourant}
+const UpdateRestorant = async (id, formData) => {
+    try {
+        const response = await axios.post(`${restorantRoute}/${id}`, formData);
+        return response.data;
+    } catch (error) {
+        console.error("Error occured", error);
+        throw error; // Re-throw the error to be handled by the caller
+    }
+};
+
+
+export {GetAllRestaurants, GetRestourant, CreateRestorant, UpdateRestorant}

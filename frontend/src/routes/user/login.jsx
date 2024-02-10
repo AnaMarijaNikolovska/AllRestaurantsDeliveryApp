@@ -32,8 +32,14 @@ const Login = () => {
                     userId: res.data.id
                 }
 
+                let roleUser = {
+                    roleId: res.data.roleId,
+                    role: res.data.role
+                }
+
                 sessionStorage.setItem('authData', JSON.stringify(authData));
-                login(res.data.id, res.data.role);
+
+                login(res.data.id, roleUser);
                 navigate("/");
                 toast(`Welcome back ${res.data.username}`);
             })

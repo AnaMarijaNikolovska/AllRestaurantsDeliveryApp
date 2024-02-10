@@ -22,6 +22,7 @@ import RestorantDetails from "./routes/restourant/restourant-details";
 import {restorantLoader} from "./loaders/restourant-loader";
 import {userLoader} from "./loaders/user-loader";
 import UserDetails from "./routes/user/user-details";
+import RestorantCreate from "./routes/restourant/restorant-create";
 
 const credentials = JSON.parse(sessionStorage.getItem("authData"));
 
@@ -49,6 +50,9 @@ const router = createBrowserRouter(
             <StandardLayout>
                 <Root/>
             </StandardLayout>}/>,
+        <Route path="/restorants/create" element={<StandardLayout>
+            <RestorantCreate/>
+        </StandardLayout>}/>,
         <Route path="/restorants/:restorantId" loader={restorantLoader} element={
             <StandardLayout>
                 <RestorantDetails/>

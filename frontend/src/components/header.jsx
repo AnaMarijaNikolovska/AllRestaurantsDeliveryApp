@@ -129,6 +129,14 @@ const Header = props => {
                         </Button>
                     ))}
                 </Box>
+                <Box>
+                    <Button
+                        onClick={() => navigate("/restorants/create")}
+                        sx={{my: 2, color: 'white', display: 'block'}}
+                    >
+                        Create Restorant
+                    </Button>
+                </Box>
 
                 <Box sx={{flexGrow: 0}}>
                     {!loggedUser ? <div className={"d-flex"}>
@@ -136,38 +144,38 @@ const Header = props => {
                             <Link to="/register" className={"nav-link h6 m-2"}>REGISTER</Link>
                         </div> :
                         <>
-                        <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                            <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
-                        </IconButton>
-                        <Menu
-                        sx={{mt: '45px'}}
-                     id="menu-appbar"
-                     anchorEl={anchorElUser}
-                     anchorOrigin={{
-                         vertical: 'top',
-                         horizontal: 'right',
-                     }}
-                     keepMounted
-                     transformOrigin={{
-                         vertical: 'top',
-                         horizontal: 'right',
-                     }}
-                     open={Boolean(anchorElUser)}
-                     onClose={handleCloseUserMenu}
-                >
-                    <MenuItem onClick={() => navigate(`/users/${loggedUser}`)}>
-                        <Typography textAlign="center">Profile</Typography>
-                    </MenuItem>
-                    <MenuItem onClick={logout}>
-                        <Typography textAlign="center">Logout</Typography>
-                    </MenuItem>
-                </Menu>
-            </>
-            }
-        </Box>
-    </Toolbar>
-</Container>
-</AppBar>
+                            <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
+                            </IconButton>
+                            <Menu
+                                sx={{mt: '45px'}}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+                                <MenuItem onClick={() => navigate(`/users/${loggedUser}`)}>
+                                    <Typography textAlign="center">Profile</Typography>
+                                </MenuItem>
+                                <MenuItem onClick={logout}>
+                                    <Typography textAlign="center">Logout</Typography>
+                                </MenuItem>
+                            </Menu>
+                        </>
+                    }
+                </Box>
+            </Toolbar>
+        </Container>
+    </AppBar>
 }
 
 export default Header;

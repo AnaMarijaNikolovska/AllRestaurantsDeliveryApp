@@ -1,7 +1,6 @@
-import {getAllRestaurants, getRestourant} from "../services/restoran-service";
-import {GetAllUsers} from "../services/user-service";
+import {GetRestourant} from "../services/restoran-service";
 
 export const restorantLoader = async ({params}) => {
-    const restorant = await getRestourant(params.restorantId);
+    const restorant = await GetRestourant(params.restorantId);
     return {restorant};
 }

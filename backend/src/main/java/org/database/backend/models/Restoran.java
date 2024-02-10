@@ -26,14 +26,7 @@ public class Restoran {
     @Column(name = "rabotno_vreme", nullable = false)
     private String rabotnoVreme;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "manager_id")
     private Manager manager;
-
-    @ManyToMany
-    @JoinTable(
-            name = "restoran_naracka",
-            joinColumns = @JoinColumn(name = "restoran_id"),
-            inverseJoinColumns = @JoinColumn(name = "naracka_id"))
-    List<Naracka> naracki;
 }

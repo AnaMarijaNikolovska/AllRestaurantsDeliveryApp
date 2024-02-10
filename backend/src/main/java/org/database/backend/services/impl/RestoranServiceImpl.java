@@ -1,6 +1,9 @@
 package org.database.backend.services.impl;
 
+import org.database.backend.models.Manager;
 import org.database.backend.models.Restoran;
+import org.database.backend.models.dto.RestorantDto;
+import org.database.backend.repositories.ManagerRepository;
 import org.database.backend.repositories.RestoranRepository;
 import org.database.backend.services.RestoranService;
 import org.springframework.stereotype.Service;
@@ -11,9 +14,11 @@ import java.util.Optional;
 @Service
 public class RestoranServiceImpl implements RestoranService {
     private final RestoranRepository restoranRepository;
+    private final ManagerRepository managerRepository;
 
-    public RestoranServiceImpl(RestoranRepository restoranRepository) {
+    public RestoranServiceImpl(RestoranRepository restoranRepository, ManagerRepository managerRepository) {
         this.restoranRepository = restoranRepository;
+        this.managerRepository = managerRepository;
     }
 
     @Override
@@ -27,27 +32,30 @@ public class RestoranServiceImpl implements RestoranService {
     }
 
     @Override
-    public Restoran saveRestoran(Restoran restoran) {
+    public Integer saveRestoran(RestorantDto restoran) throws Exception {
+        Manager manager = managerRepository.findById(restoran.getManagerId())
+                .orElseThrow(() -> new Exception("Manager not found."));
+
         Restoran newRestoran = new Restoran();
         newRestoran.setIme(restoran.getIme());
         newRestoran.setLokacija(restoran.getLokacija());
-        newRestoran.setManager(restoran.getManager());
+        newRestoran.setManager(manager);
         newRestoran.setRabotnoVreme(restoran.getRabotnoVreme());
-        return restoranRepository.save(newRestoran);
+
+        restoranRepository.save(newRestoran);
+        return newRestoran.getId();
     }
 
     @Override
-    public Restoran editRestoran(Integer id, Restoran restoran) {
-        Optional<Restoran> restoran1 = findRestoranById(id);
-        if (restoran1.isPresent()) {
-            Restoran updateRestoran = restoran1.get();
-            updateRestoran.setIme(restoran.getIme());
-            updateRestoran.setLokacija(restoran.getLokacija());
-            updateRestoran.setManager(restoran.getManager());
-            updateRestoran.setRabotnoVreme(restoran.getRabotnoVreme());
-            return restoranRepository.save(updateRestoran);
-        }
-        return null;
+    public void editRestoran(Integer id, RestorantDto restoran) throws Exception {
+        Restoran updateRestoran = findRestoranById(id)
+                .orElseThrow(() -> new Exception("Restorant is not found."));
+
+        updateRestoran.setIme(restoran.getIme());
+        updateRestoran.setLokacija(restoran.getLokacija());
+        updateRestoran.setRabotnoVreme(restoran.getRabotnoVreme());
+
+        restoranRepository.save(updateRestoran);
     }
 
     @Override
