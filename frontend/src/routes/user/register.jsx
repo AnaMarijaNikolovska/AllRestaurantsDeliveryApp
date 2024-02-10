@@ -11,14 +11,12 @@ const Register = (props) => {
     const [user, setUser] = useState({
         username: "",
         password: "",
-        name: "",
-        surname: "",
         email: "",
-        roleType: props?.location?.state?.roleType
+        role: props?.location?.state?.role
     });
 
     const chooseRole = role => {
-        setUser({...user, roleType: role});
+        setUser({...user, role: role});
     }
 
     const handleChange = name => event => {
@@ -36,7 +34,7 @@ const Register = (props) => {
     }
 
 
-    return (showRoleModal && (user.roleType === null || user.roleType === undefined) ?
+    return (showRoleModal && (user.role === null || user.role === undefined) ?
             <ChooseRole open={showRoleModal} onClose={() => setShowRoleModal(false)} roleset={chooseRole}/>
             : <Container component="main" maxWidth="xs" className="register-container-custom">
                 <Paper elevation={0} className={"d-flex flex-column align-items-center pt-5 register-paper-custom"}>
@@ -48,35 +46,6 @@ const Register = (props) => {
                     </Typography>
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    onChange={handleChange("name")}
-                                    name="firstName"
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="firstName"
-                                    label="First Name"
-                                    autoFocus
-                                    inputProps={{
-                                        minLength: 2,
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    onChange={handleChange("surname")}
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    inputProps={{
-                                        minLength: 2,
-                                    }}
-                                />
-                            </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     onChange={handleChange("email")}

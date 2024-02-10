@@ -3,10 +3,10 @@ import axios from "axios";
 const usersRoute = "/users";
 
 const UserRole = {
-    Potrosuvac: 'Potrosuvac',
-    Vozac: 'Vozac',
-    Admin: 'Admin',
-    Menager: 'Menager'
+    Potrosuvac: 'USER',
+    Vozac: 'VOZAC',
+    Admin: 'ADMIN',
+    Menager: 'MENAGER'
 }
 
 const BasicAuth = (username, password) => {

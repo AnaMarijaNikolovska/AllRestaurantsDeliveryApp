@@ -1,9 +1,6 @@
 package org.database.backend.services.impl;
 
-import org.database.backend.models.CustomUserDetails;
-import org.database.backend.models.Korisnik;
-import org.database.backend.models.Potrosuvac;
-import org.database.backend.models.Vozac;
+import org.database.backend.models.*;
 import org.database.backend.models.dto.UserDto;
 import org.database.backend.models.dto.UserLoginDto;
 import org.database.backend.models.enums.Role;
@@ -59,7 +56,7 @@ public class KorisnikServieImpl implements KorisnikService {
         Korisnik korisnik = new Korisnik(userDto.getEmail(), userDto.getUsername(), userDto.getPassword());
         korisnikRepository.save(korisnik);
 
-        switch (userDto.getRole()) {
+        switch (Role.valueOf(userDto.getRole())) {
             case DRIVER: {
 
                 Vozac vozac = new Vozac();
@@ -75,6 +72,14 @@ public class KorisnikServieImpl implements KorisnikService {
                 potrosuvac.setPhoneNumber(userDto.getPhoneNumber());
 
                 potrosuvacRepository.save(potrosuvac);
+                break;
+            }
+            case MANAGER: {
+
+                Manager menager = new Manager();
+                menager.setKorisnik(korisnik);
+
+                managerRepository.save(menager);
                 break;
             }
         }
