@@ -5,7 +5,6 @@ import {truncate} from "../functions";
 
 const RestoranCard = ({restoran}) => {
     const navigate = useNavigate();
-    console.log(restoran)
 
     return (
         restoran != null &&

@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "api/users")
@@ -23,6 +24,11 @@ public class UserController {
     @GetMapping
     public List<Korisnik> getAll() {
         return userService.findAll();
+    }
+
+    @GetMapping("{id}")
+    public Optional<CustomUserDetails> getById(@PathVariable Integer id) {
+        return userService.findById(id);
     }
 
     @PostMapping

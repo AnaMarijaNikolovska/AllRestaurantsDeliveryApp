@@ -29,4 +29,14 @@ const GetAllUsers = () => {
     return axios.get(`${usersRoute}`);
 }
 
-export {UserRole, LoginUser, RegisterUser, GetUser, GetAllUsers, BasicAuth}
+const getUserById = async (id) => {
+    try {
+        const response = await axios.get(`${usersRoute}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching restaurants:", error);
+        throw error; // Re-throw the error to be handled by the caller
+    }
+}
+
+export {UserRole, LoginUser, RegisterUser, GetUser, GetAllUsers, getUserById, BasicAuth}

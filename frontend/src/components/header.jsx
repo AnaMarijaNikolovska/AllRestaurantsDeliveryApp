@@ -23,7 +23,7 @@ const Header = props => {
     const {loggedUser, logout} = useAuthContext();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -155,7 +155,7 @@ const Header = props => {
                      open={Boolean(anchorElUser)}
                      onClose={handleCloseUserMenu}
                 >
-                    <MenuItem onClick={() => navigate(`/users/${loggedUser.id}`)}>
+                    <MenuItem onClick={() => navigate(`/users/${loggedUser}`)}>
                         <Typography textAlign="center">Profile</Typography>
                     </MenuItem>
                     <MenuItem onClick={logout}>

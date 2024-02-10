@@ -8,10 +8,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface KorisnikService extends UserDetailsService {
 
     public Integer save(UserDto userDto);
+
     public CustomUserDetails loginUser(UserLoginDto userLoginDto) throws Exception;
+
     public List<Korisnik> findAll();
+
+    public Optional<CustomUserDetails> findById(Integer id);
 }

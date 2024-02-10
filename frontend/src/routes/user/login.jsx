@@ -28,11 +28,12 @@ const Login = () => {
                 let authData = {
                     userCredential: BasicAuth(res.data.username, res.data.password),
                     userRole: userRole,
-                    userRoleId: res.data.roleId
+                    userRoleId: res.data.roleId,
+                    userId: res.data.id
                 }
 
                 sessionStorage.setItem('authData', JSON.stringify(authData));
-                login(res.data.username, res.data.role);
+                login(res.data.id, res.data.role);
                 navigate("/");
                 toast(`Welcome back ${res.data.username}`);
             })

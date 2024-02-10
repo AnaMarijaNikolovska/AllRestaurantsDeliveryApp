@@ -11,14 +11,12 @@ const AuthProvider = props => {
     useEffect(() => {
         let authData = JSON.parse(sessionStorage.getItem("authData"));
         if (authData) {
-            let username = atob(authData.userCredential.split(" ")[1]).split(":")[0].trim();
-            let role = authData.userRole;
-            login(username, role);
+            login(authData.userId, authData.userRole);
         }
     }, [])
 
-    const login = (username, role) => {
-        setLoggedUser(username);
+    const login = (id, role) => {
+        setLoggedUser(id);
         setLoggedUserRole(role);
     }
 

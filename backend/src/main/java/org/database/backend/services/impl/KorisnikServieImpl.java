@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class KorisnikServieImpl implements KorisnikService {
@@ -34,6 +35,11 @@ public class KorisnikServieImpl implements KorisnikService {
 
     public List<Korisnik> findAll() {
         return korisnikRepository.findAll();
+    }
+
+    @Override
+    public Optional<CustomUserDetails> findById(Integer id) {
+        return korisnikRepository.findUserById(id);
     }
 
     @Override
