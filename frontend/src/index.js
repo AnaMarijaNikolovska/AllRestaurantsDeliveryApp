@@ -17,7 +17,9 @@ import Login from "./routes/user/login";
 import {AuthProvider, SkipAuth} from "./configurations/AuthContext";
 import Register from "./routes/user/register";
 import StandardLayout from "./routes/standard-layout";
-import ErrorPage from "./error-page";
+import {rootLoader} from "./loaders/root-loader";
+import RestorantDetails from "./routes/restourant/restourant-details";
+import {restorantLoader} from "./loaders/restourant-loader";
 
 const credentials = JSON.parse(sessionStorage.getItem("authData"));
 
@@ -41,9 +43,13 @@ axios.interceptors.response.use((response) => {
 
 const router = createBrowserRouter(
     createRoutesFromElements([
-        <Route path="/" element={
+        <Route path="/" loader={rootLoader} element={
             <StandardLayout>
                 <Root/>
+            </StandardLayout>}/>,
+        <Route path="/restorants/:restorantId" loader={restorantLoader} element={
+            <StandardLayout>
+                <RestorantDetails/>
             </StandardLayout>}/>,
         <Route
             path={"/login"}
@@ -71,11 +77,9 @@ const router = createBrowserRouter(
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <React.StrictMode>
-        <AuthProvider>
-            <RouterProvider router={router}/>
-        </AuthProvider>
-    </React.StrictMode>
+    <AuthProvider>
+        <RouterProvider router={router}/>
+    </AuthProvider>
 )
 ;
 

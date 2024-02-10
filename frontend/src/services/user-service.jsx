@@ -25,4 +25,8 @@ const GetUser = (username) => {
     return axios.get(`${usersRoute}/${username}`);
 }
 
-export {UserRole, LoginUser, RegisterUser, GetUser, BasicAuth}
+const GetAllUsers = () => {
+    return axios.get(`${usersRoute}`);
+}
+
+export {UserRole, LoginUser, RegisterUser, GetUser, GetAllUsers, BasicAuth}
