@@ -1,11 +1,14 @@
 package org.database.backend.controllers;
 
 import org.database.backend.models.CustomUserDetails;
+import org.database.backend.models.Korisnik;
 import org.database.backend.models.dto.UserDto;
 import org.database.backend.models.dto.UserLoginDto;
 import org.database.backend.services.KorisnikService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/users")
@@ -15,6 +18,11 @@ public class UserController {
 
     public UserController(KorisnikService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping
+    public List<Korisnik> getAll() {
+        return userService.findAll();
     }
 
     @PostMapping

@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class KorisnikServieImpl implements KorisnikService {
     private final KorisnikRepository korisnikRepository;
@@ -30,6 +32,10 @@ public class KorisnikServieImpl implements KorisnikService {
         this.vozacRepository = vozacRepository;
     }
 
+    public List<Korisnik> findAll() {
+        return korisnikRepository.findAll();
+    }
+
     @Override
     public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         CustomUserDetails user = korisnikRepository.findByUsername(username)
@@ -39,7 +45,6 @@ public class KorisnikServieImpl implements KorisnikService {
         return user;
     }
 
-    @Override
     public Integer save(UserDto userDto) {
         if (userDto == null) {
             return null;

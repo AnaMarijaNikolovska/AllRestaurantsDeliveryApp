@@ -15,15 +15,15 @@ import {
 } from "@mui/material";
 import AdbIcon from '@mui/icons-material/Adb';
 import MenuIcon from '@mui/icons-material/Menu';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const Header = props => {
     const {loggedUser, logout} = useAuthContext();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const navigate = useNavigate()
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -136,39 +136,38 @@ const Header = props => {
                             <Link to="/register" className={"nav-link h6 m-2"}>REGISTER</Link>
                         </div> :
                         <>
-                            <Tooltip title="Open settings">
-                                <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
-                                </IconButton>
-                            </Tooltip>
-                            <Menu
-                                sx={{mt: '45px'}}
-                                id="menu-appbar"
-                                anchorEl={anchorElUser}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={Boolean(anchorElUser)}
-                                onClose={handleCloseUserMenu}
-                            >
-                                {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={setting === "Logout" ? logout : handleCloseUserMenu}>
-                                        <Typography textAlign="center">{setting}</Typography>
-                                    </MenuItem>
-                                ))}
-                            </Menu>
-                        </>
-                    }
-                </Box>
-            </Toolbar>
-        </Container>
-    </AppBar>
+                        <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                            <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
+                        </IconButton>
+                        <Menu
+                        sx={{mt: '45px'}}
+                     id="menu-appbar"
+                     anchorEl={anchorElUser}
+                     anchorOrigin={{
+                         vertical: 'top',
+                         horizontal: 'right',
+                     }}
+                     keepMounted
+                     transformOrigin={{
+                         vertical: 'top',
+                         horizontal: 'right',
+                     }}
+                     open={Boolean(anchorElUser)}
+                     onClose={handleCloseUserMenu}
+                >
+                    <MenuItem onClick={() => navigate(`/users/${loggedUser.id}`)}>
+                        <Typography textAlign="center">Profile</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={logout}>
+                        <Typography textAlign="center">Logout</Typography>
+                    </MenuItem>
+                </Menu>
+            </>
+            }
+        </Box>
+    </Toolbar>
+</Container>
+</AppBar>
 }
 
 export default Header;

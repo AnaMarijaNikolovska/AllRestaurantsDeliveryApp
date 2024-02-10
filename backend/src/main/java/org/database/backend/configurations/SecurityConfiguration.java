@@ -40,7 +40,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/assets/**", "/api/users/register", "/api/users/login").permitAll()
                         .requestMatchers("/api/public/**").permitAll() // Allow access to public APIs
-                        .requestMatchers(HttpMethod.GET, "/api/**").authenticated() // Require authentication for GET requests to other APIs
+                        .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/**").authenticated() // Require authentication for GET requests to other APIs
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling
