@@ -1,5 +1,6 @@
 package org.database.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,18 +32,23 @@ public class Korisnik implements UserDetails {
     private String password;
 
     @Transient
+    @JsonIgnore
     boolean isAccountNonExpired = true;
 
     @Transient
+    @JsonIgnore
     boolean isAccountNonLocked = true;
 
     @Transient
+    @JsonIgnore
     boolean isCredentialsNonExpired = true;
 
     @Transient
+    @JsonIgnore
     boolean isEnabled = true;
 
     @Transient
+    @Enumerated(EnumType.STRING)
     Role role;
 
     public Korisnik(String email, String username, String password) {
@@ -51,7 +57,15 @@ public class Korisnik implements UserDetails {
         this.password = password;
     }
 
+    public Korisnik(String email, String username, String password, Role role) {
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(role);
     }

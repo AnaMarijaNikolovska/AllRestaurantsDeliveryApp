@@ -30,12 +30,12 @@ public class Naracka {
 
     @ManyToOne
     @JoinColumn(name = "admin_id")
-    private Admin admin;
+    private Administrator administrator;
 
     @ManyToMany
     @JoinTable(
-            name = "Naracka_sodrzi_MenuItem",
+            name = "naracka_sodrzi_menu_item",
             joinColumns = @JoinColumn(name = "naracka_id"),
-            inverseJoinColumns = @JoinColumn(name = "menuItem_id"))
+            inverseJoinColumns = @JoinColumn(name = "menu_item_id"))
     List<MenuItem> narackaItems;
 }

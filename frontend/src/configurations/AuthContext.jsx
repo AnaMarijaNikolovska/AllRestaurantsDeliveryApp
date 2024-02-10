@@ -1,5 +1,5 @@
 import {createContext, useContext, useEffect, useState} from 'react'
-import {Navigate, redirect, useLocation} from "react-router-dom";
+import {Navigate, redirect, useLocation, useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 
 const AuthContext = createContext(null);
@@ -24,7 +24,6 @@ const AuthProvider = props => {
 
     const logout = () => {
         sessionStorage.removeItem("authData");
-        redirect("/");
         toast('Logged out')
 
         setLoggedUser(null);

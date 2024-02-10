@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Administrator")
-public class Admin {
+public class Administrator {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;

@@ -1,14 +1,15 @@
 import {useState} from "react";
 import {useAuthContext} from "../../configurations/AuthContext";
-import {LoginUser} from "../../services/user-service";
-import {Link, redirect} from "react-router-dom";
+import {BasicAuth, LoginUser} from "../../services/user-service";
+import {Link, redirect, useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
-import {Avatar, Button, Grid, Paper, TextField, Typography} from "@mui/material";
+import {Avatar, Button, Grid, TextField, Typography} from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import LoginPhoto from "../../assets/images/delivery.jpg";
 
 const Login = () => {
     const {loggedUser, login} = useAuthContext();
+    const navigate = useNavigate();
     const [user, setUser] = useState({
         username: "",
         password: ""
@@ -23,6 +24,17 @@ const Login = () => {
         LoginUser(user)
             .then((res) => {
                 const userRole = res.data.role;
+
+                let authData = {
+                    userCredential: BasicAuth(res.data.username, res.data.password),
+                    userRole: userRole,
+                    userRoleId: res.data.roleId
+                }
+
+                sessionStorage.setItem('authData', JSON.stringify(authData));
+                login(res.data.username, res.data.role);
+                navigate("/");
+                toast(`Welcome back ${res.data.username}`);
             })
             .catch(() => toast("Incorrect credentials. Try again"))
     }

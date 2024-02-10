@@ -1,5 +1,6 @@
 package org.database.backend.services.impl;
 
+import org.database.backend.models.CustomUserDetails;
 import org.database.backend.models.Korisnik;
 import org.database.backend.models.Potrosuvac;
 import org.database.backend.models.Vozac;
@@ -30,8 +31,8 @@ public class KorisnikServieImpl implements KorisnikService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Korisnik user = korisnikRepository.findByUsername(username)
+    public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        CustomUserDetails user = korisnikRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username is not Found."));
 
         AuthorityUtils.createAuthorityList(String.valueOf(user.getRole()));
@@ -71,7 +72,7 @@ public class KorisnikServieImpl implements KorisnikService {
     }
 
     @Override
-    public UserDetails loginUser(UserLoginDto userLoginDto) throws Exception {
+    public CustomUserDetails loginUser(UserLoginDto userLoginDto) throws Exception {
         if (userLoginDto.getUsername().isEmpty() || userLoginDto.getPassword().isEmpty()) {
             throw new Exception("Invalid request");
         }

@@ -9,6 +9,10 @@ const UserRole = {
     Menager: 'Menager'
 }
 
+const BasicAuth = (username, password) => {
+    return 'Basic ' + window.btoa(username + ":" + password);
+}
+
 const LoginUser = (loginForm) => {
     return axios.post(`${usersRoute}/login`, loginForm)
 }
@@ -21,4 +25,4 @@ const GetUser = (username) => {
     return axios.get(`${usersRoute}/${username}`);
 }
 
-export {UserRole, LoginUser, RegisterUser, GetUser}
+export {UserRole, LoginUser, RegisterUser, GetUser, BasicAuth}

@@ -30,7 +30,7 @@ public class NarackaServiceImpl implements NarackaService {
     public Naracka saveNaracka(Naracka naracka) {
         Naracka newNaracka = new Naracka();
         newNaracka.setDatum(naracka.getDatum());
-        newNaracka.setAdmin(naracka.getAdmin());
+        newNaracka.setAdministrator(naracka.getAdministrator());
         newNaracka.setVozac(naracka.getVozac());
         newNaracka.setPotrosuvac(naracka.getPotrosuvac());
         return narackaRepository.save(newNaracka);
@@ -43,7 +43,7 @@ public class NarackaServiceImpl implements NarackaService {
             Naracka updateNaracka = naracka1.get();
 
             updateNaracka.setDatum(naracka.getDatum());
-            updateNaracka.setAdmin(naracka.getAdmin());
+            updateNaracka.setAdministrator(naracka.getAdministrator());
             updateNaracka.setVozac(naracka.getVozac());
             updateNaracka.setPotrosuvac(naracka.getPotrosuvac());
             return narackaRepository.save(updateNaracka);
