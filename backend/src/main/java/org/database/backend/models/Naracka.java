@@ -39,7 +39,7 @@ public class Naracka {
     @JoinColumn(name = "admin_id")
     private Administrator administrator;
 
-    @OneToMany(mappedBy = "naracka")
+    @OneToMany(mappedBy = "naracka", orphanRemoval = true)
     private List<NarackaMenuItem> narackaMenuItems = new ArrayList<>();
 
     @Override

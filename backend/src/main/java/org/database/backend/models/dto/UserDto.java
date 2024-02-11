@@ -14,7 +14,6 @@ public class UserDto {
     private String phoneNumber;
 
     private String address;
-    private String role;
 
-//    Role role;
+    private String role;
 }

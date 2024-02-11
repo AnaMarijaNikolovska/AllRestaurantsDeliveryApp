@@ -8,8 +8,12 @@ import java.util.Optional;
 
 public interface VoziloService {
     List<Vozilo> findAllVozila();
-    Optional<Vozilo> findVoziloById(Integer id);
-    Integer saveVozilo(VoziloDto vozilo);
+
+    Vozilo findVoziloById(Integer id) throws Exception;
+
+    Integer saveVozilo(VoziloDto vozilo) throws Exception;
+
     void editVozilo(Integer id, VoziloDto vozilo) throws Exception;
+
     void deleteVozilo(Integer id);
 }

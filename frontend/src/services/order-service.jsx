@@ -6,10 +6,10 @@ const OrderStatus = {
     PendingUserApproval: 'PendingUserApproval',
     PendingAdminApproval: 'PendingAdminApproval',
     Approved: 'Approved',
+    Delivering: 'Delivering',
     Finished: 'Finished',
     Terminated: 'Terminated'
 }
-
 
 const GetAllOrders = async (status) => {
     try {
@@ -55,4 +55,25 @@ const DeleteOrder = async (id) => {
     }
 };
 
-export {GetAllOrders, CreateOrder, UpdateOrder, DeleteOrder, OrderStatus}
+const AssignOrderDriver = async (id, formData) => {
+    try {
+        const response = await axios.post(`${orderRoute}/${id}/driver`, formData);
+        return response.data;
+    } catch (error) {
+        console.error("Error occured", error);
+        throw error; // Re-throw the error to be handled by the caller
+    }
+};
+
+const AssignOrderAdmin = async (id, formData) => {
+    try {
+        const response = await axios.post(`${orderRoute}/${id}/admin`, formData);
+        return response.data;
+    } catch (error) {
+        console.error("Error occured", error);
+        throw error; // Re-throw the error to be handled by the caller
+    }
+};
+
+
+export {GetAllOrders, CreateOrder, UpdateOrder, DeleteOrder, OrderStatus, AssignOrderDriver, AssignOrderAdmin}

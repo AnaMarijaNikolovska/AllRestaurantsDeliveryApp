@@ -2,6 +2,9 @@ package org.database.backend.controllers;
 
 import org.database.backend.models.Naracka;
 import org.database.backend.models.dto.CreateNarackaDto;
+import org.database.backend.models.dto.NarackaAdminDto;
+import org.database.backend.models.dto.NarackaVozacDto;
+import org.database.backend.models.enums.OrderStatus;
 import org.database.backend.services.NarackaService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +20,7 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<Naracka> getAll(@RequestParam(value = "status", required= false) String status) {
+    public List<Naracka> getAll(@RequestParam(value = "status", required = false) String status) {
         return narackaService.findAllNaracki();
     }
 
@@ -39,5 +42,20 @@ public class OrderController {
     @DeleteMapping("{id}")
     public void delete(@PathVariable Integer id) throws Exception {
         narackaService.deleteNaracka(id);
+    }
+
+    @PostMapping("{id}/status")
+    public void changeStatus(@PathVariable Integer id, @RequestBody String orderStatus) throws Exception {
+        narackaService.changeOrderStatus(id, OrderStatus.valueOf(orderStatus));
+    }
+
+    @PostMapping("{id}/admin")
+    public void assignAdmin(@PathVariable Integer id, @RequestBody NarackaAdminDto orderAdmin) throws Exception {
+        narackaService.assignOrderAdmin(id, orderAdmin);
+    }
+
+    @PostMapping("{id}/driver")
+    public void assignDriver(@PathVariable Integer id, @RequestBody NarackaVozacDto orderDriver) throws Exception {
+        narackaService.assignOrderDriver(id, orderDriver);
     }
 }

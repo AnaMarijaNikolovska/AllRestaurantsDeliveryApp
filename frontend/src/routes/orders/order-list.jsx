@@ -2,13 +2,10 @@ import React, {useState} from "react";
 import {useAuthContext} from "../../configurations/AuthContext";
 import {Grid, Typography} from "@mui/material";
 import {useLoaderData} from "react-router-dom";
-import MenuItemCard from "../../components/cards/menu-item-card";
-import RoleCard from "../../components/cards/role-card";
 import OrderCard from "../../components/cards/order-card";
 
 const OrderList = ({id}) => {
     const {isAuthorized} = useAuthContext();
-    const [openUpdateModal, setOpenUpdateModal] = useState(false);
     const {orders} = useLoaderData();
     console.log(orders);
 
@@ -18,7 +15,7 @@ const OrderList = ({id}) => {
                 <Typography className={"mt-3"} variant={"body1"}>
                 </Typography>
             </Grid>
-test test
+            ALl Orders
             <Typography>
             </Typography>
             <hr className={"horizontal-fancy"}/>

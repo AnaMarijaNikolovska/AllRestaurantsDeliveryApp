@@ -37,7 +37,11 @@ const AuthProvider = props => {
     }
 
     const isAuthorized = (id) => {
-        return id === loggedUserRole?.roleId;
+        if (!loggedUserRole) {
+            return false;
+        }
+
+        return id === loggedUserRole.roleId;
     }
 
     return (

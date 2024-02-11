@@ -28,5 +28,9 @@ public interface NarackaMenuItemRepository extends JpaRepository<NarackaMenuItem
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM naracka_sodrzi_menu_item nm INNER JOIN naracka n ON n.id = nm.naracka_id WHERE nm.naracka_id = :narackaId AND n.Status = 'PendingUserApproval' ", nativeQuery = true)
-    void deleteAllMenuItemsFromNaracka(Integer narackaId);
+    void deleteAllMenuItemsUnclosedFromNaracka(Integer narackaId);
+
+    @Modifying
+    @Transactional
+    void deleteAllByNarackaId(Integer narackaId);
 }

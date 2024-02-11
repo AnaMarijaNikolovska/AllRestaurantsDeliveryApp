@@ -7,4 +7,6 @@ public class VoziloDto {
     String tip;
 
     String registracija;
+
+    Integer vozacId;
 }
