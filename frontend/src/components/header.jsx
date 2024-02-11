@@ -17,6 +17,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import MenuIcon from '@mui/icons-material/Menu';
 import {Link, useNavigate} from "react-router-dom";
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
+import FaceIcon from '@mui/icons-material/Face';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 
@@ -130,14 +131,14 @@ const Header = props => {
                         </Button>
                     ))}
                 </Box>
-                <Box>
-                    <Button
-                        onClick={() => navigate("/restorants/create")}
-                        sx={{my: 2, color: 'white', display: 'block'}}
-                    >
-                        Create Restorant
-                    </Button>
-                </Box>
+                {/*<Box>*/}
+                {/*    <Button*/}
+                {/*        onClick={() => navigate("/restorants/create")}*/}
+                {/*        sx={{my: 2, color: 'white', display: 'block'}}*/}
+                {/*    >*/}
+                {/*        Create Restorant*/}
+                {/*    </Button>*/}
+                {/*</Box>*/}
 
                 <Box sx={{flexGrow: 0}}>
                     {!loggedUser ? <div className={"d-flex"}>
@@ -145,8 +146,10 @@ const Header = props => {
                             <Link to="/register" className={"nav-link h6 m-2"}>REGISTER</Link>
                         </div> :
                         <>
+
                             <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
+                                <FaceIcon style={{ color: 'white'}}/>
+                                {/*<Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>*/}
                             </IconButton>
                             <Menu
                                 sx={{mt: '45px'}}
@@ -166,6 +169,9 @@ const Header = props => {
                             >
                                 <MenuItem onClick={() => navigate(`/users/${loggedUser}`)}>
                                     <Typography textAlign="center">Profile</Typography>
+                                </MenuItem>
+                                <MenuItem onClick={() => navigate("/restorants/create")}>
+                                    <Typography textAlign="center"> Create Restaurant</Typography>
                                 </MenuItem>
                                 <MenuItem onClick={logout}>
                                     <Typography textAlign="center">Logout</Typography>
