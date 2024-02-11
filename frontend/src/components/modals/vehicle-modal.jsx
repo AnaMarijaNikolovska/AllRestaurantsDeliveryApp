@@ -21,7 +21,7 @@ const CreateUpdateVehicleModal = ({vehicle, ...props}) => {
                 </IconButton>
             </DialogTitle>
             <DialogContent className={"mb-3"}>
-                <DriverVehicleForm vehicle={vehicle}/>
+                <DriverVehicleForm vehicle={vehicle} onClose={props.onClose}/>
             </DialogContent>
         </Dialog>
     )

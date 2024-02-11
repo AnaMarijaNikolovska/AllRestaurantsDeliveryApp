@@ -6,6 +6,7 @@ import org.database.backend.services.VoziloService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/vehicles")
@@ -24,6 +25,11 @@ public class VehicleController {
     @GetMapping("{id}")
     public Vozilo getById(@PathVariable Integer id) throws Exception {
         return voziloService.findVoziloById(id);
+    }
+
+    @GetMapping("driver/{driverId}")
+    public Optional<Vozilo> getByDriverId(@PathVariable Integer driverId) throws Exception {
+        return voziloService.findVoziloByDriverId(driverId);
     }
 
     @PostMapping

@@ -11,6 +11,8 @@ public interface VoziloService {
 
     Vozilo findVoziloById(Integer id) throws Exception;
 
+    Optional<Vozilo> findVoziloByDriverId(Integer driverId) throws Exception;
+
     Integer saveVozilo(VoziloDto vozilo) throws Exception;
 
     void editVozilo(Integer id, VoziloDto vozilo) throws Exception;

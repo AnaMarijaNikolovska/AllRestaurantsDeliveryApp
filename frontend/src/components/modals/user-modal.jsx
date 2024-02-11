@@ -27,9 +27,8 @@ const EditUserModal = ({roleset, ...props}) => {
                     <CloseIcon/>
                 </IconButton>
             </DialogTitle>
-            <UserForm/>
             <DialogContent className={"mb-3"}>
-
+                <UserForm onClose={props.onClose}/>
             </DialogContent>
         </Dialog>
     )

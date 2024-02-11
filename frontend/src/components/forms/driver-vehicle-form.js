@@ -29,8 +29,8 @@ const DriverVehicleForm = ({vehicle, onClose}) => {
             return;
         }
 
-        let vehicleId = await CreateVehicle(formData)
-        navigate(`/vehicles/${vehicleId}`);
+        await CreateVehicle(formData)
+        navigate(location.pathname);
     }
 
     return (<form onSubmit={handleSubmit}>

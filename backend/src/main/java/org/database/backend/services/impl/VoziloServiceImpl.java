@@ -33,6 +33,11 @@ public class VoziloServiceImpl implements VoziloService {
     }
 
     @Override
+    public Optional<Vozilo> findVoziloByDriverId(Integer driverId) throws Exception {
+        return voziloRepository.findByVozacId(driverId);
+    }
+
+    @Override
     public Integer saveVozilo(VoziloDto vozilo) throws Exception {
         Vozilo newVozilo = new Vozilo();
         Vozac vozac = vozacRepository.findById(vozilo.getVozacId())

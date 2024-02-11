@@ -22,6 +22,16 @@ const GetVehicle = async (id) => {
     }
 };
 
+const GetVehicleByDriverId = async (driverId) => {
+    try {
+        const response = await axios.get(`${vehicleRoute}/driver/${driverId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching", error);
+        throw error; // Re-throw the error to be handled by the caller
+    }
+};
+
 const CreateVehicle = async (formData) => {
     try {
         const response = await axios.post(`${vehicleRoute}`, formData);
@@ -53,4 +63,4 @@ const DeleteVehicle = async (id) => {
 };
 
 
-export {GetAllVehicles, GetVehicle, CreateVehicle, UpdateVehicle, DeleteVehicle}
+export {GetAllVehicles, GetVehicle, GetVehicleByDriverId, CreateVehicle, UpdateVehicle, DeleteVehicle}
