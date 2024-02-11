@@ -6,6 +6,7 @@ import {toast} from "react-toastify";
 import {Avatar, Button, Grid, TextField, Typography} from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import LoginPhoto from "../../assets/images/delivery.jpg";
+import PersonIcon from '@mui/icons-material/Person';
 
 const Login = () => {
     const {loggedUser, login} = useAuthContext();
@@ -49,7 +50,7 @@ const Login = () => {
                 <Grid item xs={12} sm={8} md={5} elevation={6} className={"flex-column-align-justify-center"}>
                     <div className={"d-flex flex-column align-items-center"}>
                         <Avatar>
-                            <LockOutlinedIcon/>
+                            <PersonIcon/>
                         </Avatar>
                         <Typography component="h1" variant="h5">
                             Sign in

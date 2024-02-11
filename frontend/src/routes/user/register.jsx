@@ -1,8 +1,9 @@
 import {useState} from "react";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {toast} from "react-toastify";
-import {RegisterUser} from "../../services/user-service";
+import {RegisterUser, UserRole} from "../../services/user-service";
 import {Link, redirect, useNavigate} from "react-router-dom";
+import PersonIcon from '@mui/icons-material/Person';
 import {Avatar, Button, Container, Grid, Paper, TextField, Typography} from "@mui/material";
 import ChooseRole from "../../components/modals/role-modal";
 
@@ -12,9 +13,11 @@ const Register = (props) => {
         username: "",
         password: "",
         email: "",
+        address: "",
+        phoneNumber: "",
         role: props?.location?.state?.role
     });
-   const navigate = useNavigate();
+    const navigate = useNavigate();
     const chooseRole = role => {
         setUser({...user, role: role});
     }
@@ -39,7 +42,7 @@ const Register = (props) => {
             : <Container component="main" maxWidth="xs" className="register-container-custom">
                 <Paper elevation={0} className={"d-flex flex-column align-items-center pt-5 register-paper-custom"}>
                     <Avatar>
-                        <LockOutlinedIcon/>
+                        <PersonIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5" className={"mb-3"}>
                         Sign up
@@ -86,7 +89,45 @@ const Register = (props) => {
                                     }}
                                 />
                             </Grid>
+                            {user.role === UserRole.Potrosuvac &&
+                                <>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            onChange={handleChange("address")}
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            name="address"
+                                            label="Address"
+                                            type="text"
+                                            id="address"
+                                            inputProps={{
+                                                minLength: 6,
+                                            }}
+                                        />
+                                    </Grid>
+
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            onChange={handleChange("phoneNumber")}
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            name="phoneNumber"
+                                            label="Phone Number"
+                                            type="text"
+                                            id="phoneNumber"
+                                            inputProps={{
+                                                minLength: 6,
+                                            }}
+                                        />
+                                    </Grid>
+                                </>
+                            }
+
                         </Grid>
+                        <br/>
+
                         <Button
                             type="submit"
                             fullWidth

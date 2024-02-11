@@ -16,6 +16,7 @@ import {
 import AdbIcon from '@mui/icons-material/Adb';
 import MenuIcon from '@mui/icons-material/Menu';
 import {Link, useNavigate} from "react-router-dom";
+import LocalDiningIcon from '@mui/icons-material/LocalDining';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 
@@ -44,7 +45,7 @@ const Header = props => {
     return <AppBar position="static">
         <Container maxWidth="xl">
             <Toolbar disableGutters>
-                <AdbIcon sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>
+                <LocalDiningIcon sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>
                 <Typography
                     variant="h6"
                     noWrap
@@ -60,7 +61,7 @@ const Header = props => {
                         textDecoration: 'none',
                     }}
                 >
-                    LOGO
+                    All Restaurants
                 </Typography>
 
                 <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>

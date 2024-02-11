@@ -1,4 +1,4 @@
-import {Button, Grid, TextField} from "@mui/material";
+import {Button, Container, Grid, TextField} from "@mui/material";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {useAuthContext} from "../../configurations/AuthContext";
@@ -36,7 +36,7 @@ const RestorantForm = ({restorant, onClose}) => {
 
     return (<form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} >
                 <TextField
                     onChange={handleChange("ime")}
                     name="ime"
@@ -50,7 +50,7 @@ const RestorantForm = ({restorant, onClose}) => {
                     }}
                 />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} >
                 <TextField
                     onChange={handleChange("lokacija")}
                     variant="outlined"
@@ -65,6 +65,7 @@ const RestorantForm = ({restorant, onClose}) => {
                 />
             </Grid>
             <Grid item xs={12}>
+
                 <TextField
                     onChange={handleChange("rabotnoVreme")}
                     variant="outlined"
