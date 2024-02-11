@@ -25,6 +25,9 @@ import UserDetails from "./routes/user/user-details";
 import RestorantCreate from "./routes/restourant/restorant-create";
 import OrderList from "./routes/orders/order-list";
 import {orderLoader} from "./loaders/order-loader";
+import RestorantsPage from "./routes/restourant/restaurants-page";
+import {menuItemLoader} from "./loaders/menu-item-loader";
+import MenuItemsListPage from "./routes/menuItems/menu-items-list-page";
 
 const credentials = JSON.parse(sessionStorage.getItem("authData"));
 
@@ -52,6 +55,10 @@ const router = createBrowserRouter(
             <StandardLayout>
                 <Root/>
             </StandardLayout>}/>,
+        <Route path="/restaurants" loader={rootLoader} element={
+            <StandardLayout>
+                <RestorantsPage/>
+            </StandardLayout>}/>,
         <Route path="/restorants/create" element={<StandardLayout>
             <RestorantCreate/>
         </StandardLayout>}/>,
@@ -65,6 +72,10 @@ const router = createBrowserRouter(
         <Route path="/users/:userId" loader={userLoader} element={
             <StandardLayout>
                 <UserDetails/>
+            </StandardLayout>}/>,
+        <Route path="/menuItems" loader={menuItemLoader} element={
+            <StandardLayout>
+                <MenuItemsListPage/>
             </StandardLayout>}/>,
         <Route
             path={"/login"}

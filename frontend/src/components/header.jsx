@@ -19,8 +19,6 @@ import {Link, useNavigate} from "react-router-dom";
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import FaceIcon from '@mui/icons-material/Face';
 
-const pages = ['Products', 'Pricing', 'Blog'];
-
 const Header = props => {
     const {loggedUser, logout} = useAuthContext();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -94,19 +92,22 @@ const Header = props => {
                             display: {xs: 'block', md: 'none'},
                         }}
                     >
-                        {pages.map((page) => (
-                            <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                <Typography textAlign="center">{page}</Typography>
-                            </MenuItem>
-                        ))}
+                        <MenuItem onClick={() => navigate("/restaurants")}>
+                            <Typography textAlign="center">Restaurants</Typography>
+                        </MenuItem>
+
+                        <MenuItem onClick={() => navigate("/menuItems")}>
+                            <Typography textAlign="center">Menu Items</Typography>
+                        </MenuItem>
+
                     </Menu>
                 </Box>
-                <AdbIcon sx={{display: {xs: 'flex', md: 'none'}, mr: 1}}/>
+                <LocalDiningIcon sx={{display: {xs: 'flex', md: 'none'}, mr: 1}}/>
                 <Typography
                     variant="h5"
                     noWrap
                     component="a"
-                    href="#app-bar-with-responsive-menu"
+                    to="/"
                     sx={{
                         mr: 2,
                         display: {xs: 'flex', md: 'none'},
@@ -118,18 +119,20 @@ const Header = props => {
                         textDecoration: 'none',
                     }}
                 >
-                    LOGO
+                    All Restaurants
                 </Typography>
                 <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-                    {pages.map((page) => (
-                        <Button
-                            key={page}
-                            onClick={handleCloseNavMenu}
-                            sx={{my: 2, color: 'white', display: 'block'}}
-                        >
-                            {page}
-                        </Button>
-                    ))}
+
+                    <Button onClick={() => navigate("/restaurants")}
+                            sx={{my: 2, color: 'white', display: 'block'}}>
+                        Restaurants
+                    </Button>
+                    <Button
+                        onClick={() => navigate("/menuItems")}
+                        sx={{my: 2, color: 'white', display: 'block'}}
+                    >
+                        Menu Items
+                    </Button>
                     <Button
                         onClick={() => navigate("/orders")}
                         sx={{my: 2, color: 'white', display: 'block'}}
@@ -154,7 +157,7 @@ const Header = props => {
                         <>
 
                             <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                <FaceIcon style={{ color: 'white'}}/>
+                                <FaceIcon style={{color: 'white'}}/>
                                 {/*<Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>*/}
                             </IconButton>
                             <Menu

@@ -23,9 +23,12 @@ const UserDetails = ({id}) => {
 
             <Grid item xs={6} flexDirection={'column'} alignItems={"center"} justify={"space-between"}
                   className={"mt-5"}>
-                <Typography className={"mt-3 mb-2"} variant={"h3"} alignContent={"center"}>
-                    <b> User Details</b>
-                </Typography>
+                <Grid>
+                    <Typography className={"mt-3 mb-2"} variant={"h3"} alignContent={"center"}>
+                        <b> User Details</b>
+                    </Typography>
+                </Grid>
+
                 <Grid> <Typography className={"mt-3"} variant={"body1"}>
                     <b> Email: </b> {user.email}
                 </Typography>

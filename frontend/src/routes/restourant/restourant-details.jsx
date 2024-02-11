@@ -8,6 +8,8 @@ import MenuItemCard from "../../components/cards/menu-item-card";
 import {CreateOrder, OrderStatus} from "../../services/order-service";
 import {UserRole} from "../../services/user-service";
 import {ShoppingCart} from "@mui/icons-material";
+import RestaurantPhoto from "../../assets/images/restoran.png";
+
 
 const RestorantDetails = ({id}) => {
     const {isAuthorized, loggedUserRole} = useAuthContext();
@@ -60,46 +62,52 @@ const RestorantDetails = ({id}) => {
 
 
     return (restorant &&
-        <Grid container direction={"column"} justify={"center"} alignItems={"center"}>
-            <Grid container alignItems={"center"} justify={"space-between"}>
-                {restorant.ime}
-                <Typography className={"mt-3"} variant={"body1"}>
-                    {restorant.lokacija}
-                </Typography>
-            </Grid>
-
-            <Typography>
-                {restorant.rabotnoVreme}
-            </Typography>
-            <hr className={"horizontal-fancy"}/>
-
-            <Grid container alignItems={"center"} justify={"space-between"}>
-                <h1>Manager: </h1>
-                <Typography className={"mt-3"} variant={"body1"}>
-                    {restorant.manager?.id}
-                </Typography>
-                <Typography className={"mt-3"} variant={"body1"}>
-                    {restorant.manager?.korisnik?.username}
-                </Typography>
-            </Grid>
-
-            {loggedUserRole?.role === UserRole.Potrosuvac &&
-                <>
-                    <Button onClick={() => handleNarackaSubmit(OrderStatus.PendingUserApproval)}>Add to
-                        Cart <ShoppingCart/> </Button>
-                    <Button onClick={() => handleNarackaSubmit(OrderStatus.PendingAdminApproval)}>Finish Order</Button>
-                </>}
-
-            {isAuthorized(restorant?.manager?.id) &&
-                <Grid>
-                    <Button onClick={() => setOpenUpdateModal(true)}>
-                        Update Restorant
-                    </Button>
-                    <Button onClick={() => setOpenMenuItemModal(true)}>
-                        Create Menu Item
-                    </Button>
+        <Grid container direction={"row"} justify={"center"} alignItems={"center"} component={"main"}>
+            <Grid container item xs={12}>
+                <Grid item xs={5} alignItems={"center"} justify={"space-between"}
+                      className={"background-image mt-5"}
+                      height={'250px'}
+                      width={'500px'}
+                      style={{backgroundImage: `url(${RestaurantPhoto})`}}>
                 </Grid>
-            }
+                <Grid item xs={7} className={"mt-5"}>
+                    <Grid container  justify={"space-between"} direction={"column"} className={"m-3"}>
+                        <Typography variant={"h3"}>
+                            {restorant.ime}
+                        </Typography>
+                        <Typography  variant={"body2"}>
+                            {restorant.lokacija} , {restorant.rabotnoVreme}
+                        </Typography>
+                    </Grid>
+                    {/*<Typography>*/}
+                    {/*    {restorant.rabotnoVreme}*/}
+                    {/*</Typography>*/}
+                    <Grid container direction={"row"} className={"m-3"}>
+                        <Typography variant={"h6"}>
+                            Manager: {restorant.manager?.korisnik?.username}
+                        </Typography>
+                    </Grid>
+                    <Grid container direction={'row'}>
+                        {loggedUserRole?.role === UserRole.Potrosuvac &&
+                            <>
+                                <Button onClick={() => handleNarackaSubmit(OrderStatus.PendingUserApproval)}>Add to
+                                    Cart <ShoppingCart/> </Button>
+                                <Button onClick={() => handleNarackaSubmit(OrderStatus.PendingAdminApproval)}>Finish Order</Button>
+                            </>}
+
+                        {isAuthorized(restorant?.manager?.id) &&
+                            <Grid>
+                                <Button onClick={() => setOpenUpdateModal(true)}>
+                                    Update Restorant
+                                </Button>
+                                <Button onClick={() => setOpenMenuItemModal(true)}>
+                                    Create Menu Item
+                                </Button>
+                            </Grid>
+                        }
+                    </Grid>
+                </Grid>
+            </Grid>
 
             {restorant.menuItems &&
                 restorant.menuItems.length > 0 &&
