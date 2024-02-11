@@ -13,8 +13,20 @@ const BasicAuth = (username, password) => {
     return 'Basic ' + window.btoa(username + ":" + password);
 }
 
-const LoginUser = (loginForm) => {
-    return axios.post(`${usersRoute}/login`, loginForm)
+// const LoginUser = (loginForm) => {
+//     return axios.post(`${usersRoute}/login`, loginForm)
+// }
+
+const LoginUser = async (loginForm) => {
+    try {
+        const response = await axios.post(`${usersRoute}/login`, loginForm);
+        axios.defaults.headers.common['Authorization'] = BasicAuth(response.data.username, response.data.password);
+
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching restaurants:", error);
+        throw error; // Re-throw the error to be handled by the caller
+    }
 }
 
 const RegisterUser = (userForm) => {

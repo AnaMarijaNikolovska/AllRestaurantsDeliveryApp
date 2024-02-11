@@ -1,16 +1,22 @@
 package org.database.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "MenuItem")
-public class MenuItem {
+@Table(name = "Menu_Item")
+public class MenuItem implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
@@ -23,5 +29,22 @@ public class MenuItem {
 
     @ManyToOne
     @JoinColumn(name = "restoran_id")
+    @JsonIgnore
     private Restoran restoran;
+
+    @OneToMany(mappedBy = "menuItem")
+    @JsonIgnore
+    private List<NarackaMenuItem> narackaMenuItems = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MenuItem menuItem)) return false;
+        return Objects.equals(id, menuItem.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

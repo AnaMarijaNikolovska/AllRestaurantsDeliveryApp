@@ -11,7 +11,7 @@ export default function Root() {
                 loaderData.restorants.length > 0 &&
                 loaderData.restorants.map((restoran) => (
                     <Grid key={restoran.id} item xs={12} md={6} lg={4}>
-                        <RestoranCard restoran={restoran} filterTeamLead={false}/>
+                        <RestoranCard restoran={restoran}/>
                     </Grid>
                 ))}
         </Grid>

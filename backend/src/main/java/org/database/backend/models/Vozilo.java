@@ -20,6 +20,9 @@ public class Vozilo {
     String tip;
 
     @Column(name = "br_registracija", nullable = false)
-    String br_telefon;
+    String registracija;
 
+    @OneToOne
+    @JoinColumn(name = "vozac_id", nullable = false)
+    private Vozac vozac;
 }

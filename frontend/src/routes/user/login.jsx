@@ -19,38 +19,34 @@ const Login = () => {
         setUser({...user, [name]: event.target.value});
     };
 
-    const handleSubmit = event => {
+    const handleSubmit = async event => {
         event.preventDefault();
-        LoginUser(user)
-            .then((res) => {
-                const userRole = res.data.role;
+        const response = await LoginUser(user);
 
-                let authData = {
-                    userCredential: BasicAuth(res.data.username, res.data.password),
-                    userRole: userRole,
-                    userRoleId: res.data.roleId,
-                    userId: res.data.id
-                }
+        let authData = {
+            userCredential: BasicAuth(response.username, response.password),
+            userId: response.id,
+            userRole: response.role,
+            userRoleId: response.roleId
+        }
 
-                let roleUser = {
-                    roleId: res.data.roleId,
-                    role: res.data.role
-                }
+        let roleUser = {
+            roleId: response.roleId,
+            role: response.role
+        }
 
-                sessionStorage.setItem('authData', JSON.stringify(authData));
+        sessionStorage.setItem('authData', JSON.stringify(authData));
 
-                login(res.data.id, roleUser);
-                navigate("/");
-                toast(`Welcome back ${res.data.username}`);
-            })
-            .catch(() => toast("Incorrect credentials. Try again"))
+        login(response.id, roleUser);
+        navigate("/");
+        toast(`Welcome back ${user.username}`);
     }
 
     return (loggedUser ? redirect("/") :
             <Grid container component={"main"}>
                 <Grid item xs={false} sm={4} md={7} className={"background-image login-text"}
                       style={{backgroundImage: `url(${LoginPhoto})`}}> All Restaurants Delivery </Grid>
-                <Grid item xs={12} sm={8} md={5} elevation={6} square className={"flex-column-align-justify-center"}>
+                <Grid item xs={12} sm={8} md={5} elevation={6} className={"flex-column-align-justify-center"}>
                     <div className={"d-flex flex-column align-items-center"}>
                         <Avatar>
                             <LockOutlinedIcon/>

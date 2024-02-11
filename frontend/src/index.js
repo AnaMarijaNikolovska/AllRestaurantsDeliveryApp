@@ -23,6 +23,8 @@ import {restorantLoader} from "./loaders/restourant-loader";
 import {userLoader} from "./loaders/user-loader";
 import UserDetails from "./routes/user/user-details";
 import RestorantCreate from "./routes/restourant/restorant-create";
+import OrderList from "./routes/orders/order-list";
+import {orderLoader} from "./loaders/order-loader";
 
 const credentials = JSON.parse(sessionStorage.getItem("authData"));
 
@@ -53,6 +55,9 @@ const router = createBrowserRouter(
         <Route path="/restorants/create" element={<StandardLayout>
             <RestorantCreate/>
         </StandardLayout>}/>,
+        <Route path="/orders" loader={orderLoader} element={<StandardLayout>
+            <OrderList/>
+        </StandardLayout>}/>,
         <Route path="/restorants/:restorantId" loader={restorantLoader} element={
             <StandardLayout>
                 <RestorantDetails/>
@@ -64,20 +69,20 @@ const router = createBrowserRouter(
         <Route
             path={"/login"}
             element={
-                <StandardLayout>
-                    <SkipAuth>
+                <SkipAuth>
+                    <StandardLayout>
                         <Login/>
-                    </SkipAuth>
-                </StandardLayout>
+                    </StandardLayout>
+                </SkipAuth>
             }/>,
         <Route
             path={"/register"}
             element={
-                <StandardLayout>
-                    <SkipAuth>
+                <SkipAuth>
+                    <StandardLayout>
                         <Register/>
-                    </SkipAuth>
-                </StandardLayout>
+                    </StandardLayout>
+                </SkipAuth>
             }
         />,
         <Route path="*" element={<Navigate to="/" replace/>}/>

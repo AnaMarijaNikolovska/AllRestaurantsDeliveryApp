@@ -2,18 +2,16 @@ import {Button, Grid, TextField} from "@mui/material";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {useAuthContext} from "../../configurations/AuthContext";
-import {CreateRestorant, UpdateRestorant} from "../../services/restoran-service";
+import {CreateMenuItem, UpdateMenuItem} from "../../services/menu-item-service";
 
-const RestorantForm = ({restorant, onClose}) => {
+const MenuItemForm = ({menuItem, restorantId = undefined, onClose}) => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const {loggedUserRole} = useAuthContext();
     const [formData, setFormData] = useState({
-        ime: restorant?.ime ?? "",
-        lokacija: restorant?.lokacija ?? "",
-        rabotnoVreme: restorant?.rabotnoVreme ?? "",
-        managerId: restorant?.manager.id ?? loggedUserRole?.roleId
+        ime: menuItem?.ime ?? "",
+        cena: menuItem?.cena ?? 0,
+        restorantId: restorantId
     });
 
     const handleChange = name => event => {
@@ -22,16 +20,17 @@ const RestorantForm = ({restorant, onClose}) => {
 
     const handleSubmit = async event => {
         event.preventDefault();
-        if (restorant) {
-            await UpdateRestorant(restorant.id, formData)
+        if (menuItem) {
+            await UpdateMenuItem(menuItem.id, formData)
             navigate(location.pathname);
             onClose();
 
             return;
         }
 
-        let restorantId = await CreateRestorant(formData)
-        navigate(`/restorants/${restorantId}`);
+        await CreateMenuItem(formData)
+        onClose();
+        navigate(location.pathname);
     }
 
     return (<form onSubmit={handleSubmit}>
@@ -52,27 +51,14 @@ const RestorantForm = ({restorant, onClose}) => {
             </Grid>
             <Grid item xs={12} sm={6}>
                 <TextField
-                    onChange={handleChange("lokacija")}
+                    onChange={handleChange("cena")}
                     variant="outlined"
                     required
                     fullWidth
-                    label="Lokacija"
-                    name="lokacija"
-                    value={formData.lokacija}
-                    inputProps={{
-                        minLength: 2,
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <TextField
-                    onChange={handleChange("rabotnoVreme")}
-                    variant="outlined"
-                    required
-                    fullWidth
-                    label="Rabotno vreme vo format OD - DO"
-                    value={formData.rabotnoVreme}
-                    name="rabotnoVreme"
+                    label="Cena"
+                    type="number"
+                    name="cena"
+                    value={formData.cena}
                     inputProps={{
                         minLength: 2,
                     }}
@@ -84,11 +70,11 @@ const RestorantForm = ({restorant, onClose}) => {
                     fullWidth
                     variant="contained"
                 >
-                    {restorant ? "Edit" : "Create"}
+                    {menuItem ? "Edit" : "Create"}
                 </Button>
             </Grid>
         </Grid>
     </form>)
 }
 
-export default RestorantForm;
+export default MenuItemForm;

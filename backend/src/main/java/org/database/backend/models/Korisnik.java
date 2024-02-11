@@ -21,7 +21,7 @@ public class Korisnik implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "korisnik_id")
-    Integer id;
+    protected Integer id;
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 

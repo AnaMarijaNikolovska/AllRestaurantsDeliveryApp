@@ -2,6 +2,8 @@ package org.database.backend.controllers;
 
 import org.database.backend.models.Restoran;
 import org.database.backend.models.dto.RestorantDto;
+import org.database.backend.models.responses.RestorantResponse;
+import org.database.backend.repositories.RestoranRepository;
 import org.database.backend.services.RestoranService;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +26,7 @@ public class RestorantController {
     }
 
     @GetMapping("{id}")
-    public Optional<Restoran> getById(@PathVariable Integer id) {
+    public RestorantResponse getById(@PathVariable Integer id) throws Exception {
         return restoranService.findRestoranById(id);
     }
 

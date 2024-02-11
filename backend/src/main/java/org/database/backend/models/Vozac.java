@@ -19,9 +19,4 @@ public class Vozac {
     @OneToOne
     @JoinColumn(name = "korisnik_id")
     private Korisnik korisnik;
-
-    @OneToOne
-    @JoinColumn(name = "vozilo_id", nullable = false)
-    private Vozilo vozilo;
-
 }

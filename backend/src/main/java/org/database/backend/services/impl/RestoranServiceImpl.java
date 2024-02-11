@@ -1,9 +1,12 @@
 package org.database.backend.services.impl;
 
 import org.database.backend.models.Manager;
+import org.database.backend.models.MenuItem;
 import org.database.backend.models.Restoran;
 import org.database.backend.models.dto.RestorantDto;
+import org.database.backend.models.responses.RestorantResponse;
 import org.database.backend.repositories.ManagerRepository;
+import org.database.backend.repositories.MenuItemRepository;
 import org.database.backend.repositories.RestoranRepository;
 import org.database.backend.services.RestoranService;
 import org.springframework.stereotype.Service;
@@ -14,10 +17,12 @@ import java.util.Optional;
 @Service
 public class RestoranServiceImpl implements RestoranService {
     private final RestoranRepository restoranRepository;
+    private final MenuItemRepository menuItemRepository;
     private final ManagerRepository managerRepository;
 
-    public RestoranServiceImpl(RestoranRepository restoranRepository, ManagerRepository managerRepository) {
+    public RestoranServiceImpl(RestoranRepository restoranRepository, MenuItemRepository menuItemRepository, ManagerRepository managerRepository) {
         this.restoranRepository = restoranRepository;
+        this.menuItemRepository = menuItemRepository;
         this.managerRepository = managerRepository;
     }
 
@@ -27,8 +32,14 @@ public class RestoranServiceImpl implements RestoranService {
     }
 
     @Override
-    public Optional<Restoran> findRestoranById(Integer id) {
-        return restoranRepository.findById(id);
+    public RestorantResponse findRestoranById(Integer id) throws Exception {
+
+        RestorantResponse restorant = restoranRepository.findRestorantById(id)
+                .orElseThrow(() -> new Exception("Restorant not found"));
+
+        List<MenuItem> menuItems = menuItemRepository.findAllByRestoranId(restorant.getId());
+        restorant.setMenuItems(menuItems);
+        return restorant;
     }
 
     @Override
@@ -48,7 +59,7 @@ public class RestoranServiceImpl implements RestoranService {
 
     @Override
     public void editRestoran(Integer id, RestorantDto restoran) throws Exception {
-        Restoran updateRestoran = findRestoranById(id)
+        Restoran updateRestoran = restoranRepository.findById(id)
                 .orElseThrow(() -> new Exception("Restorant is not found."));
 
         updateRestoran.setIme(restoran.getIme());

@@ -1,6 +1,7 @@
 package org.database.backend.services.impl;
 
 import org.database.backend.models.Vozilo;
+import org.database.backend.models.dto.VoziloDto;
 import org.database.backend.repositories.VoziloRepository;
 import org.database.backend.services.VoziloService;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 @Service
 public class VoziloServiceImpl implements VoziloService {
-   private final VoziloRepository voziloRepository;
+    private final VoziloRepository voziloRepository;
 
     public VoziloServiceImpl(VoziloRepository voziloRepository) {
         this.voziloRepository = voziloRepository;
@@ -27,23 +28,24 @@ public class VoziloServiceImpl implements VoziloService {
     }
 
     @Override
-    public Vozilo saveVozilo(Vozilo vozilo) {
+    public Integer saveVozilo(VoziloDto vozilo) {
         Vozilo newVozilo = new Vozilo();
-        newVozilo.setBr_telefon(vozilo.getBr_telefon());
+        newVozilo.setRegistracija(vozilo.getRegistracija());
         newVozilo.setTip(vozilo.getTip());
-        return voziloRepository.save(newVozilo);
+        voziloRepository.save(newVozilo);
+
+        return newVozilo.getId();
     }
 
     @Override
-    public Vozilo editVozilo(Integer id, Vozilo vozilo) {
-        Optional<Vozilo> vozilo1 = findVoziloById(id);
-        if (vozilo1.isPresent()){
-            Vozilo updateVozilo = vozilo1.get();
-            updateVozilo.setBr_telefon(vozilo.getBr_telefon());
-            updateVozilo.setTip(vozilo.getTip());
-            return voziloRepository.save(updateVozilo);
-        }
-        return null;
+    public void editVozilo(Integer id, VoziloDto vozilo) throws Exception {
+        Vozilo updateVozilo = findVoziloById(id)
+                .orElseThrow(() -> new Exception("Vehicle is not found"));
+
+        updateVozilo.setRegistracija(vozilo.getRegistracija());
+        updateVozilo.setTip(vozilo.getTip());
+
+        voziloRepository.save(updateVozilo);
     }
 
     @Override

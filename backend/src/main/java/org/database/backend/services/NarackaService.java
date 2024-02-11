@@ -1,20 +1,22 @@
 package org.database.backend.services;
 
 import org.database.backend.models.Naracka;
-import org.database.backend.models.Vozac;
+import org.database.backend.models.dto.CreateNarackaDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface NarackaService {
     List<Naracka> findAllNaracki();
-    Optional<Naracka> findNarackaById(Integer naracka_id);
+
+    Naracka findNarackaById(Integer id) throws Exception;
 
 //    List<Vozac> findAllNarackiByVozac();
 //    List<Vozac> findAllNarackiByRestoran();
 //    List<Vozac> findAllNarackiByPotrosuvac();
 
-    Naracka saveNaracka(Naracka naracka);
-    Naracka editNaracka(Integer naracka_id,Naracka naracka);
+    Integer saveNaracka(CreateNarackaDto naracka) throws Exception;
+
+    void editNaracka(Integer id, CreateNarackaDto naracka) throws Exception;
+
     void deleteNaracka(Integer naracka_id);
 }

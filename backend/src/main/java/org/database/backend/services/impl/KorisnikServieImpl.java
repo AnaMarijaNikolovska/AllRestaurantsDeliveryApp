@@ -4,10 +4,10 @@ import org.database.backend.models.*;
 import org.database.backend.models.dto.UserDto;
 import org.database.backend.models.dto.UserLoginDto;
 import org.database.backend.models.enums.Role;
+import org.database.backend.models.responses.CustomUserDetails;
 import org.database.backend.repositories.*;
 import org.database.backend.services.KorisnikService;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 

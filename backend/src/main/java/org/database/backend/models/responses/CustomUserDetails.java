@@ -1,7 +1,8 @@
-package org.database.backend.models;
+package org.database.backend.models.responses;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.database.backend.models.Korisnik;
 import org.database.backend.models.enums.Role;
 
 @EqualsAndHashCode(callSuper = true)

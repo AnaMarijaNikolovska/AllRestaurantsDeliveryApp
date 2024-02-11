@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.database.backend.models.enums.OrderStatus;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -18,7 +21,11 @@ public class Naracka {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
     @Column(name = "Datum")
-    private Date datum;
+    private LocalDateTime datum;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
     @ManyToOne
     @JoinColumn(name = "potrosuvac_id")
@@ -32,10 +39,18 @@ public class Naracka {
     @JoinColumn(name = "admin_id")
     private Administrator administrator;
 
-    @ManyToMany
-    @JoinTable(
-            name = "naracka_sodrzi_menu_item",
-            joinColumns = @JoinColumn(name = "naracka_id"),
-            inverseJoinColumns = @JoinColumn(name = "menu_item_id"))
-    List<MenuItem> narackaItems;
+    @OneToMany(mappedBy = "naracka")
+    private List<NarackaMenuItem> narackaMenuItems = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Naracka naracka)) return false;
+        return Objects.equals(id, naracka.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

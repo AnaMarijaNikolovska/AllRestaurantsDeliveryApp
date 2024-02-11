@@ -1,6 +1,8 @@
 import {createContext, useContext, useEffect, useState} from 'react'
 import {Navigate, redirect, useLocation, useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
+import axios from "axios";
+import {BasicAuth} from "../services/user-service";
 
 const AuthContext = createContext(null);
 
@@ -27,14 +29,15 @@ const AuthProvider = props => {
 
     const logout = () => {
         sessionStorage.removeItem("authData");
-        toast('Logged out')
+        toast('Logged out');
 
         setLoggedUser(null);
         setLoggedUserRole(null);
+        axios.defaults.headers.common['Authorization'] = null;
     }
 
     const isAuthorized = (id) => {
-        return id === loggedUserRole.roleId;
+        return id === loggedUserRole?.roleId;
     }
 
     return (

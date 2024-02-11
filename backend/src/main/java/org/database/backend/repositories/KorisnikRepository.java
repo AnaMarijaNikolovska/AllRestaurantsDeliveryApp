@@ -1,6 +1,6 @@
 package org.database.backend.repositories;
 
-import org.database.backend.models.CustomUserDetails;
+import org.database.backend.models.responses.CustomUserDetails;
 import org.database.backend.models.Korisnik;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface KorisnikRepository extends JpaRepository<Korisnik, Integer> {
     @Query("SELECT " +
-            "new org.database.backend.models.CustomUserDetails(k.id, k.email, k.username, k.password, " +
+            "new org.database.backend.models.responses.CustomUserDetails(k.id, k.email, k.username, k.password, " +
             "CAST(CASE " +
             "WHEN m.id IS NOT NULL THEN org.database.backend.models.enums.Role.MANAGER " +
             "WHEN a.id IS NOT NULL THEN org.database.backend.models.enums.Role.ADMIN " +
@@ -31,7 +31,7 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Integer> {
     Optional<CustomUserDetails> findByUsername(String username);
 
     @Query("SELECT " +
-            "new org.database.backend.models.CustomUserDetails(k.id, k.email, k.username, k.password, " +
+            "new org.database.backend.models.responses.CustomUserDetails(k.id, k.email, k.username, k.password, " +
             "CAST(CASE " +
             "WHEN m.id IS NOT NULL THEN org.database.backend.models.enums.Role.MANAGER " +
             "WHEN a.id IS NOT NULL THEN org.database.backend.models.enums.Role.ADMIN " +
