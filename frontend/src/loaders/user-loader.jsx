@@ -1,6 +1,8 @@
 import {getRestourant} from "../services/restoran-service";
 import {getUserById, UserRole} from "../services/user-service";
 import {GetVehicleByDriverId} from "../services/vehicle-service";
+import {GetAllOrders, GetMyOrders} from "../services/order-service";
+import {GetCustomerPayments} from "../services/payment-service";
 
 export const userLoader = async ({params}) => {
     const user = await getUserById(params.userId);
@@ -11,4 +13,14 @@ export const userLoader = async ({params}) => {
     }
 
     return {user, vehicle};
+}
+
+export const userOrderLoader = async ({params}) => {
+    const orders = await GetMyOrders(params.userId);
+    return {orders};
+}
+
+export const userPaymentLoader = async ({params}) => {
+    const payments = await GetCustomerPayments(params.userId);
+    return {payments};
 }

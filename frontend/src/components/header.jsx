@@ -1,26 +1,14 @@
 import React from "react";
 import {useAuthContext} from "../configurations/AuthContext"
-import {
-    AppBar,
-    Avatar,
-    Box,
-    Button,
-    Container,
-    IconButton,
-    Menu,
-    MenuItem,
-    Toolbar,
-    Tooltip,
-    Typography
-} from "@mui/material";
-import AdbIcon from '@mui/icons-material/Adb';
+import {AppBar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Typography} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import {Link, useNavigate} from "react-router-dom";
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import FaceIcon from '@mui/icons-material/Face';
+import {UserRole} from "../services/user-service";
 
 const Header = props => {
-    const {loggedUser, logout} = useAuthContext();
+    const {loggedUser, loggedUserRole, logout} = useAuthContext();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const navigate = useNavigate();
@@ -140,15 +128,6 @@ const Header = props => {
                         Orders
                     </Button>
                 </Box>
-                {/*<Box>*/}
-                {/*    <Button*/}
-                {/*        onClick={() => navigate("/restorants/create")}*/}
-                {/*        sx={{my: 2, color: 'white', display: 'block'}}*/}
-                {/*    >*/}
-                {/*        Create Restorant*/}
-                {/*    </Button>*/}
-                {/*</Box>*/}
-
                 <Box sx={{flexGrow: 0}}>
                     {!loggedUser ? <div className={"d-flex"}>
                             <Link to="/login" className={"nav-link h6 m-2"}>LOGIN</Link>
@@ -179,9 +158,16 @@ const Header = props => {
                                 <MenuItem onClick={() => navigate(`/users/${loggedUser}`)}>
                                     <Typography textAlign="center">Profile</Typography>
                                 </MenuItem>
-                                <MenuItem onClick={() => navigate("/restorants/create")}>
-                                    <Typography textAlign="center"> Create Restaurant</Typography>
+                                {loggedUserRole.role === UserRole.Potrosuvac &&
+                                    <MenuItem
+                                        onClick={() => navigate(`/users/${loggedUserRole.roleId}/orders`, {state: {loggedUserId: loggedUserRole.roleId}})}>
+                                        < Typography textAlign="center"> My Orders</Typography>
+                                    </MenuItem>}
+                                {loggedUserRole.role === UserRole.Potrosuvac && <MenuItem
+                                    onClick={() => navigate(`/users/${loggedUserRole.roleId}/transactions-history`, {state: {loggedUserId: loggedUserRole.roleId}})}>
+                                    < Typography textAlign="center"> Transaction History</Typography>
                                 </MenuItem>
+                                }
                                 <MenuItem onClick={logout}>
                                     <Typography textAlign="center">Logout</Typography>
                                 </MenuItem>

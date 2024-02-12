@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.database.backend.models.enums.PaymentType;
 
 @Entity
 @Data
@@ -19,7 +20,8 @@ public class Naplata {
     private int iznos;
 
     @Column(name = "nacin_na_plakjane")
-    private String nacinNaPlakjane;
+    @Enumerated(EnumType.STRING)
+    private PaymentType nacinNaPlakjane;
 
     @ManyToOne
     @JoinColumn(name = "potrosuvac_id")

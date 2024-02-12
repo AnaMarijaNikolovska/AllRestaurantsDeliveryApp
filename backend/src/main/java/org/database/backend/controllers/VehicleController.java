@@ -18,7 +18,7 @@ public class VehicleController {
     }
 
     @GetMapping
-    public List<Vozilo> getAll(@RequestParam(value = "status", required = false) String status) {
+    public List<Vozilo> getAll() {
         return voziloService.findAllVozila();
     }
 

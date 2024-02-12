@@ -24,6 +24,11 @@ public class OrderController {
         return narackaService.findAllNaracki();
     }
 
+    @GetMapping("customer/{id}")
+    public List<Naracka> getAll(@PathVariable Integer id) {
+        return narackaService.findAllNarackiByPotrosuvac(id);
+    }
+
     @GetMapping("{id}")
     public Naracka getById(@PathVariable Integer id) throws Exception {
         return narackaService.findNarackaById(id);

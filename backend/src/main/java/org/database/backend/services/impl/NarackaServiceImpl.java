@@ -40,6 +40,11 @@ public class NarackaServiceImpl implements NarackaService {
     }
 
     @Override
+    public List<Naracka> findAllByCustomerUserId(Integer id) {
+        return null;
+    }
+
+    @Override
     public List<Naracka> findAllByStatus(OrderStatus orderStatus) {
         return narackaRepository.findAllByStatus(orderStatus);
     }

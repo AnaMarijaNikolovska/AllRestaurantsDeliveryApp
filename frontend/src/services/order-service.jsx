@@ -55,6 +55,16 @@ const DeleteOrder = async (id) => {
     }
 };
 
+const GetOrder = async (id) => {
+    try {
+        const response = await axios.get(`${orderRoute}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error occured", error);
+        throw error; // Re-throw the error to be handled by the caller
+    }
+};
+
 const AssignOrderDriver = async (id, formData) => {
     try {
         const response = await axios.post(`${orderRoute}/${id}/driver`, formData);
@@ -75,5 +85,24 @@ const AssignOrderAdmin = async (id, formData) => {
     }
 };
 
+const GetMyOrders = async (id) => {
+    try {
+        const response = await axios.get(`${orderRoute}/customer/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error occured", error);
+        throw error; // Re-throw the error to be handled by the caller
+    }
+};
 
-export {GetAllOrders, CreateOrder, UpdateOrder, DeleteOrder, OrderStatus, AssignOrderDriver, AssignOrderAdmin}
+export {
+    GetAllOrders,
+    GetOrder,
+    CreateOrder,
+    UpdateOrder,
+    DeleteOrder,
+    OrderStatus,
+    AssignOrderDriver,
+    AssignOrderAdmin,
+    GetMyOrders
+}

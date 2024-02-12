@@ -20,7 +20,7 @@ import StandardLayout from "./routes/standard-layout";
 import {rootLoader} from "./loaders/root-loader";
 import RestorantDetails from "./routes/restourant/restourant-details";
 import {restorantLoader} from "./loaders/restourant-loader";
-import {userLoader} from "./loaders/user-loader";
+import {userLoader, userOrderLoader, userPaymentLoader} from "./loaders/user-loader";
 import UserDetails from "./routes/user/user-details";
 import RestorantCreate from "./routes/restourant/restorant-create";
 import OrderList from "./routes/orders/order-list";
@@ -28,6 +28,10 @@ import {orderLoader} from "./loaders/order-loader";
 import RestorantsPage from "./routes/restourant/restaurants-page";
 import {menuItemLoader} from "./loaders/menu-item-loader";
 import MenuItemsListPage from "./routes/menuItems/menu-items-list-page";
+import {loadStripe} from "@stripe/stripe-js";
+import {PublishableStripeKey} from "./services/payment-service";
+import UserOrders from "./routes/user/user-orders";
+import UserPayments from "./routes/user/user-payments";
 
 const credentials = JSON.parse(sessionStorage.getItem("authData"));
 
@@ -47,6 +51,8 @@ axios.interceptors.response.use((response) => {
     }
     return Promise.reject(error.response);
 });
+
+const stripePromise = loadStripe(PublishableStripeKey);
 
 
 const router = createBrowserRouter(
@@ -72,6 +78,14 @@ const router = createBrowserRouter(
         <Route path="/users/:userId" loader={userLoader} element={
             <StandardLayout>
                 <UserDetails/>
+            </StandardLayout>}/>,
+        <Route path="/users/:userId/orders" loader={userOrderLoader} element={
+            <StandardLayout>
+                <UserOrders/>
+            </StandardLayout>}/>,
+        <Route path="/users/:userId/transactions-history" loader={userPaymentLoader} element={
+            <StandardLayout>
+                <UserPayments/>
             </StandardLayout>}/>,
         <Route path="/menuItems" loader={menuItemLoader} element={
             <StandardLayout>

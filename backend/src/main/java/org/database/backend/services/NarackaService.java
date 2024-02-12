@@ -11,6 +11,8 @@ import java.util.List;
 public interface NarackaService {
     List<Naracka> findAllNaracki();
 
+    List<Naracka> findAllByCustomerUserId(Integer id);
+
     List<Naracka> findAllByStatus(OrderStatus orderStatus);
 
     Naracka findNarackaById(Integer id) throws Exception;

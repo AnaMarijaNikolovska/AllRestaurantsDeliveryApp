@@ -22,8 +22,9 @@ import MenuItem from "../../assets/images/menuItem.jpg";
 import UserDetailsPhoto from "../../assets/images/userDetailsBasicPhoto.jpg";
 import PersonIcon from "@mui/icons-material/Person";
 import PaidIcon from '@mui/icons-material/Paid';
+import {OrderStatus} from "../../services/order-service";
 
-const MenuItemCard = ({item, restorant, itemchange, quantitynb}) => {
+const MenuItemCard = ({item, restorant, itemchange, quantitynb, skipChanges = false}) => {
     const [openUpdateModal, setOpenUpdateModal] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
@@ -54,21 +55,37 @@ const MenuItemCard = ({item, restorant, itemchange, quantitynb}) => {
     return (
         item != null &&
         <Card
-            className={`card-zoom team-card m-3 `}>
+            className={`card-zoom m-3 `}>
             <CardContent className={"cursor-pointer"}>
-                <Grid container direction={"row"}>
-                    <Grid>
-                        <img src={MenuItem} height={'100'}/>
-
+                <Grid container direction={"row"} alignItems={"center"}>
+                    <Grid item md={3}>
+                        <img src={MenuItem} height={'100'} alt={"food"}/>
                     </Grid>
-                    <Grid direction={"row"}>
-                        <Grid> <Typography variant={"h5"}
-                                           className={"font-weight-bold mt-3 p-1"}>
-                            {item.ime}
-                        </Typography></Grid>
-                        <Grid direction={"column"}> <Typography className={"card-description p-1"}>
-                            $ {item.cena}
-                        </Typography></Grid>
+                    <Grid item md={6}>
+                        <Typography variant={"h5"}
+                                    className={"font-weight-bold p-1"}>
+                            {truncate(item.ime, 15, 30)}
+                        </Typography>
+                        <Typography className={"card-description p-1"}>
+                            {item.cena} MKD
+                        </Typography>
+                    </Grid>
+                    <Grid item md={3} className={"d-flex flex-column"}>
+                        <Typography className={"card-description p-1"} align={"center"}>
+                            <b>{quantity} </b> items
+                        </Typography>
+
+                        {loggedUserRole?.role === UserRole.Potrosuvac && !skipChanges &&
+                            <Grid container item justifyContent={"space-around"}>
+                                <Button color="error" onClick={handleMenuOrderQuantityChange(quantity - 1)}>
+                                    <RemoveCircle/>
+                                </Button>
+                                <Button onClick={handleMenuOrderQuantityChange(quantity + 1)}>
+                                    <AddCircle/></Button></Grid>
+                        }
+                        <Typography className={"card-description mt-1 p-1"} align={"center"}>
+                            Price: <b>{quantity * item.cena}</b> MKD
+                        </Typography>
                     </Grid>
                 </Grid>
 
@@ -81,13 +98,6 @@ const MenuItemCard = ({item, restorant, itemchange, quantitynb}) => {
                         </Button>
                         <Button onClick={() => handleDelete(item?.id)}>Delete</Button>
                     </>}
-                {loggedUserRole?.role === UserRole.Potrosuvac && <>
-                    <Button color="error" onClick={handleMenuOrderQuantityChange(quantity - 1)}>
-                        <RemoveCircle/>
-                    </Button>
-                    {quantity}
-                    <Button onClick={handleMenuOrderQuantityChange(quantity + 1)}>
-                        <AddCircle/></Button></>}
             </CardActions>
 
             {openUpdateModal &&

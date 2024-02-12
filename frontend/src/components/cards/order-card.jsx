@@ -1,20 +1,24 @@
-import React, {useState} from "react";
-import {Button, Card, CardActions, CardContent, CardHeader, Typography} from "@mui/material";
+import React, {useEffect, useRef, useState} from "react";
+import {Button, Card, CardActions, CardContent, CardHeader, Grid, Typography} from "@mui/material";
 import MenuItemCard from "./menu-item-card";
-import {formatDate} from "../functions";
+import {calculateTotalPrice, formatDate} from "../functions";
 import {useAuthContext} from "../../configurations/AuthContext";
 import {AssignOrderAdmin, AssignOrderDriver, OrderStatus, UpdateOrder} from "../../services/order-service";
 import {useLocation, useNavigate} from "react-router-dom";
 import {UserRole} from "../../services/user-service";
+import PaymentModal from "../modals/payment-modal";
 
 const OrderCard = ({order}) => {
     const [naracka, setNaracka] = useState(order ?? undefined);
+    const [openPaymentModal, setOpenPaymentModal] = useState(false);
     const {isAuthorized, loggedUserRole} = useAuthContext();
     const navigate = useNavigate();
     const location = useLocation();
 
-    const handleSaveNaracka = async (status) => {
+    useEffect(() => {
+    }, [naracka]);
 
+    const handleSaveNaracka = async (status) => {
         let updatedOrder = {
             potrosuvacId: naracka?.potrosuvac?.id,
             status: status,
@@ -82,49 +86,63 @@ const OrderCard = ({order}) => {
     };
 
     return (
-        naracka && <Card variant="outlined" className={"m-1"}>
+        naracka && <Card variant="elevation" className={"m-1"}>
             <CardHeader title={`NARACKA BROJ #${order.id}`}/>
             <CardContent className={"d-flex flex-column align-content-center justify-content-center"}>
                 <Typography className={"text-center"} variant="h5">
                     {formatDate(order.datum)}
                 </Typography>
-                <Typography className={"text-center"} variant="h5">
-                    {order.status}
+                <Typography className={"text-center mt-1"} variant="h5">
+                    <i>{order.status}</i>
                 </Typography>
 
-                {naracka.narackaMenuItems && naracka.narackaMenuItems.length > 0 && naracka.narackaMenuItems.map((narackaMenu) =>
+                {order.narackaMenuItems && order.narackaMenuItems.length > 0 && order.narackaMenuItems.map((narackaMenu) =>
                     <div key={narackaMenu.id}>
                         <MenuItemCard item={narackaMenu.menuItem} quantitynb={narackaMenu.quantity}
+                                      skipChanges={order.status === OrderStatus.PendingAdminApproval}
                                       itemchange={handleAddRemoveToNaracka}/>
                     </div>)}
             </CardContent>
             <CardActions>
-                {isAuthorized(order?.potrosuvac?.id) && order?.status === OrderStatus.PendingUserApproval &&
-                    <>
-                        <Button onClick={() => handleSaveNaracka(OrderStatus.PendingUserApproval)}>Save changes</Button>
-                        <Button onClick={() => handleSaveNaracka(OrderStatus.PendingAdminApproval)}>Finish
-                            Order</Button>
-                    </>}
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Typography variant={"h4"}>
+                            Total Price: {calculateTotalPrice(naracka?.narackaMenuItems)} MKD
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        {isAuthorized(order?.potrosuvac?.id) && order?.status === OrderStatus.PendingUserApproval &&
+                            <>
+                                <Button onClick={() => handleSaveNaracka(OrderStatus.PendingUserApproval)}>Save
+                                    changes</Button>
+                                <Button onClick={() => setOpenPaymentModal(true)}>Pay now</Button>
+                            </>}
 
-                {loggedUserRole?.role === UserRole.Admin &&
-                    <>
-                        {order.status !== OrderStatus.Approved &&
-                            <Button onClick={() => handleAssignAdmin(OrderStatus.Approved)}>Approve</Button>}
-                        {order.status !== OrderStatus.Terminated &&
-                            <Button onClick={() => handleAssignAdmin(OrderStatus.Terminated)}>Reject
-                                Order</Button>}
-                        {order.status !== OrderStatus.Finished &&
-                            <Button onClick={() => handleAssignAdmin(OrderStatus.Finished)}>Finish
-                                Order</Button>}
-                    </>}
+                        {loggedUserRole?.role === UserRole.Admin &&
+                            <>
+                                {order.status !== OrderStatus.Approved &&
+                                    <Button onClick={() => handleAssignAdmin(OrderStatus.Approved)}>Approve</Button>}
+                                {order.status !== OrderStatus.Terminated &&
+                                    <Button onClick={() => handleAssignAdmin(OrderStatus.Terminated)}>Reject
+                                        Order</Button>}
+                                {order.status !== OrderStatus.Finished &&
+                                    <Button onClick={() => handleAssignAdmin(OrderStatus.Finished)}>Finish
+                                        Order</Button>}
+                            </>}
 
-                {loggedUserRole?.role === UserRole.Vozac && order.status === OrderStatus.Approved &&
-                    <>
-                        < Button onClick={() => handleAssignVozac(OrderStatus.Delivering)}>Pick up Order</Button>
-                        < Button onClick={() => handleAssignVozac(OrderStatus.Finished)}>Finish Order</Button>
-                        < Button onClick={() => handleAssignVozac(OrderStatus.Terminated)}>Cancel Order</Button>
-                    </>}
+                        {loggedUserRole?.role === UserRole.Vozac && [OrderStatus.Approved, OrderStatus.Delivering].includes(order.status) &&
+                            <>
+                                {order.status !== OrderStatus.Delivering &&
+                                    < Button onClick={() => handleAssignVozac(OrderStatus.Delivering)}>Pick up
+                                        Order</Button>}
+                                < Button onClick={() => handleAssignVozac(OrderStatus.Finished)}>Finish Order</Button>
+                                < Button onClick={() => handleAssignVozac(OrderStatus.Terminated)}>Cancel Order</Button>
+                            </>}
+                    </Grid>
+                </Grid>
             </CardActions>
+            {openPaymentModal &&
+                <PaymentModal naracka={naracka} open={openPaymentModal} onClose={() => setOpenPaymentModal(false)}/>}
         </Card>
     )
 }

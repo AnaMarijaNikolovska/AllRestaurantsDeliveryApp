@@ -44,6 +44,15 @@ const UserDetails = ({id}) => {
                         <b> Role:</b> {user.role}
                     </Typography>
                 </Grid>
+                {loggedUserRole?.role === UserRole.Potrosuvac &&
+                <Grid>
+                    <Typography className={"mt-3"} variant={"body1"}>
+                        <b> PhoneNumber:</b> {user.phoneNumber}
+                    </Typography>
+                    <Typography className={"mt-3"} variant={"body1"}>
+                        <b> Address:</b> {user.address}
+                    </Typography>
+                </Grid>}
 
                 {loggedUserRole?.role === UserRole.Vozac &&
                     <Grid className={"mt-5"}>
