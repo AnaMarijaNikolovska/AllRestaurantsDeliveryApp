@@ -8,7 +8,6 @@ const GetAllVehicles = async () => {
         return response.data;
     } catch (error) {
         console.error("Error fetching", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -18,7 +17,6 @@ const GetVehicle = async (id) => {
         return response.data;
     } catch (error) {
         console.error("Error fetching", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -28,7 +26,6 @@ const GetVehicleByDriverId = async (driverId) => {
         return response.data;
     } catch (error) {
         console.error("Error fetching", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -38,7 +35,6 @@ const CreateVehicle = async (formData) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -48,7 +44,6 @@ const UpdateVehicle = async (id, formData) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -58,7 +53,6 @@ const DeleteVehicle = async (id) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 

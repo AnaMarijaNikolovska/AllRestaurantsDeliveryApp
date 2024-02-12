@@ -24,6 +24,10 @@ const Login = () => {
         event.preventDefault();
         const response = await LoginUser(user);
 
+        if (!response) {
+            return;
+        }
+
         let authData = {
             userCredential: BasicAuth(response.username, response.password),
             userId: response.id,

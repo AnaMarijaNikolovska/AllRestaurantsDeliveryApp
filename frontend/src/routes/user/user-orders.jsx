@@ -8,7 +8,6 @@ const UserOrders = () => {
     const {loggedUserRole} = useAuthContext();
     const {orders} = useLoaderData();
     const {userId} = useParams();
-    console.log(loggedUserRole?.roleId !== !userId);
 
     return (loggedUserRole?.roleId != userId ? <Navigate to={"/"}/> :
             <Grid container direction={"column"} justify={"center"} alignItems={"center"}>

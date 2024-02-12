@@ -29,7 +29,6 @@ public class MenuItem implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "restoran_id")
-    @JsonIgnore
     private Restoran restoran;
 
     @OneToMany(mappedBy = "menuItem")

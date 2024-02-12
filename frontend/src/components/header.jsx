@@ -28,6 +28,10 @@ const Header = props => {
         setAnchorElUser(null);
     };
 
+    const handleLogout = () => {
+        logout();
+        navigate("/");
+    }
 
     return <AppBar position="static">
         <Container maxWidth="xl">
@@ -111,22 +115,22 @@ const Header = props => {
                 </Typography>
                 <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
 
-                    <Button onClick={() => navigate("/restaurants")}
+                    <Button onClick={() => navigate("/restorants")}
                             sx={{my: 2, color: 'white', display: 'block'}}>
                         Restaurants
                     </Button>
                     <Button
-                        onClick={() => navigate("/menuItems")}
+                        onClick={() => navigate("/menu-items")}
                         sx={{my: 2, color: 'white', display: 'block'}}
                     >
                         Menu Items
                     </Button>
-                    <Button
+                    {[UserRole.Vozac, UserRole.Admin].includes(loggedUserRole?.role) && <Button
                         onClick={() => navigate("/orders")}
                         sx={{my: 2, color: 'white', display: 'block'}}
                     >
                         Orders
-                    </Button>
+                    </Button>}
                 </Box>
                 <Box sx={{flexGrow: 0}}>
                     {!loggedUser ? <div className={"d-flex"}>
@@ -137,7 +141,6 @@ const Header = props => {
 
                             <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
                                 <FaceIcon style={{color: 'white'}}/>
-                                {/*<Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>*/}
                             </IconButton>
                             <Menu
                                 sx={{mt: '45px'}}
@@ -168,7 +171,7 @@ const Header = props => {
                                     < Typography textAlign="center"> Transaction History</Typography>
                                 </MenuItem>
                                 }
-                                <MenuItem onClick={logout}>
+                                <MenuItem onClick={handleLogout}>
                                     <Typography textAlign="center">Logout</Typography>
                                 </MenuItem>
                             </Menu>

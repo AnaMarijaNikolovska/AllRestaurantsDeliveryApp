@@ -8,7 +8,6 @@ const UserPayments = () => {
     const {loggedUserRole} = useAuthContext();
     const {payments} = useLoaderData();
     const {userId} = useParams();
-    console.log(payments);
 
     return (loggedUserRole?.roleId != userId ? <Navigate to={"/"}/> :
             <Grid container direction={"column"} justify={"center"} alignItems={"center"}>

@@ -16,7 +16,6 @@ const GetAllPayments = async () => {
         return response.data;
     } catch (error) {
         console.error("Error fetching", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -26,7 +25,6 @@ const GetPayment = async (id) => {
         return response.data;
     } catch (error) {
         console.error("Error fetching", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -36,7 +34,6 @@ const GetCustomerPayments = async (id) => {
         return response.data;
     } catch (error) {
         console.error("Error fetching", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -46,7 +43,6 @@ const CreatePayment = async (formData) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -56,7 +52,6 @@ const UpdatePayment = async (id, formData) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -66,7 +61,6 @@ const DeletePayment = async (id) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 

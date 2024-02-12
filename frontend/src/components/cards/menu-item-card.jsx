@@ -1,28 +1,13 @@
 import React, {useState} from "react";
-import {useLocation, useNavigate} from "react-router-dom";
-import {
-    Avatar,
-    Button,
-    Card,
-    CardActions,
-    CardContent,
-    CardHeader,
-    Grid,
-    Icon,
-    TextField,
-    Typography
-} from "@mui/material";
+import {Link, useLocation, useNavigate} from "react-router-dom";
+import {Button, Card, CardActions, CardContent, Grid, Typography} from "@mui/material";
 import {truncate} from "../functions";
 import CreateEditMenuItemModal from "../modals/menu-item-modal";
 import {DeleteMenuItem} from "../../services/menu-item-service";
 import {useAuthContext} from "../../configurations/AuthContext";
 import {UserRole} from "../../services/user-service";
-import {Add, AddCircle, RemoveCircle} from "@mui/icons-material";
+import {AddCircle, RemoveCircle, Restaurant} from "@mui/icons-material";
 import MenuItem from "../../assets/images/menuItem.jpg";
-import UserDetailsPhoto from "../../assets/images/userDetailsBasicPhoto.jpg";
-import PersonIcon from "@mui/icons-material/Person";
-import PaidIcon from '@mui/icons-material/Paid';
-import {OrderStatus} from "../../services/order-service";
 
 const MenuItemCard = ({item, restorant, itemchange, quantitynb, skipChanges = false}) => {
     const [openUpdateModal, setOpenUpdateModal] = useState(false);
@@ -30,7 +15,7 @@ const MenuItemCard = ({item, restorant, itemchange, quantitynb, skipChanges = fa
     const location = useLocation();
     const {loggedUserRole, isAuthorized} = useAuthContext();
 
-    const [quantity, setQuantity] = useState(quantitynb ?? 0)
+    const [quantity, setQuantity] = useState(quantitynb ?? 0);
 
     const handleMenuOrderQuantityChange = (number) => event => {
         if (number < 0) {
@@ -70,7 +55,7 @@ const MenuItemCard = ({item, restorant, itemchange, quantitynb, skipChanges = fa
                             {item.cena} MKD
                         </Typography>
                     </Grid>
-                    <Grid item md={3} className={"d-flex flex-column"}>
+                    {itemchange && <Grid item md={3} className={"d-flex flex-column"}>
                         <Typography className={"card-description p-1"} align={"center"}>
                             <b>{quantity} </b> items
                         </Typography>
@@ -86,12 +71,18 @@ const MenuItemCard = ({item, restorant, itemchange, quantitynb, skipChanges = fa
                         <Typography className={"card-description mt-1 p-1"} align={"center"}>
                             Price: <b>{quantity * item.cena}</b> MKD
                         </Typography>
+                    </Grid>}
+
+                    <Grid item md={12} className={"mt-2"}>
+                        <Link to={`/restorants/${item.restoran.id}`}>
+                            <Restaurant/> {truncate(item.restoran.ime)}
+                        </Link>
                     </Grid>
                 </Grid>
 
             </CardContent>
             <CardActions>
-                {isAuthorized(restorant?.manager?.id) &&
+                {(isAuthorized(restorant?.manager?.id) || loggedUserRole?.role === UserRole.Admin) &&
                     <>
                         <Button onClick={() => setOpenUpdateModal(true)}>
                             Edit
@@ -101,7 +92,7 @@ const MenuItemCard = ({item, restorant, itemchange, quantitynb, skipChanges = fa
             </CardActions>
 
             {openUpdateModal &&
-                <CreateEditMenuItemModal menuItem={item} restorantId={restorant.id} open={openUpdateModal}
+                <CreateEditMenuItemModal menuItem={item} restorantId={item.restoran.id} open={openUpdateModal}
                                          onClose={handleEdit}/>}
         </Card>
     )

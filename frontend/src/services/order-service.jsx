@@ -21,7 +21,6 @@ const GetAllOrders = async (status) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -31,7 +30,6 @@ const CreateOrder = async (formData) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -41,7 +39,6 @@ const UpdateOrder = async (id, formData) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -51,7 +48,6 @@ const DeleteOrder = async (id) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -61,7 +57,6 @@ const GetOrder = async (id) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -71,7 +66,6 @@ const AssignOrderDriver = async (id, formData) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -81,7 +75,6 @@ const AssignOrderAdmin = async (id, formData) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -91,7 +84,6 @@ const GetMyOrders = async (id) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 

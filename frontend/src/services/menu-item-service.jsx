@@ -8,7 +8,6 @@ const GetAllMenuItems = async () => {
         return response.data;
     } catch (error) {
         console.error("Error fetching restaurants:", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -18,7 +17,6 @@ const GetMenuItem = async (id) => {
         return response.data;
     } catch (error) {
         console.error("Error fetching restaurants:", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -28,7 +26,6 @@ const CreateMenuItem = async (formData) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -38,7 +35,6 @@ const UpdateMenuItem = async (id, formData) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -48,7 +44,6 @@ const DeleteMenuItem = async (id) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 

@@ -8,7 +8,6 @@ const GetAllRestaurants = async () => {
         return response.data;
     } catch (error) {
         console.error("Error fetching restaurants:", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -18,7 +17,6 @@ const GetRestourant = async (id) => {
         return response.data;
     } catch (error) {
         console.error("Error fetching restaurants:", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -28,7 +26,6 @@ const CreateRestorant = async (formData) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 
@@ -38,7 +35,6 @@ const UpdateRestorant = async (id, formData) => {
         return response.data;
     } catch (error) {
         console.error("Error occured", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 };
 

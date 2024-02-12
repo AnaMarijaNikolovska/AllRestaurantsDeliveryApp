@@ -29,7 +29,7 @@ const AuthProvider = props => {
 
     const logout = () => {
         sessionStorage.removeItem("authData");
-        toast('Logged out');
+        toast.success('Logged out');
 
         setLoggedUser(null);
         setLoggedUserRole(null);

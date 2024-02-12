@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import {useAuthContext} from "../../configurations/AuthContext";
-import {Button, Grid, Paper, Typography} from "@mui/material";
+import {Button, Grid, Typography} from "@mui/material";
 import {useLoaderData} from "react-router-dom";
-import LoginPhoto from "../../assets/images/delivery.jpg";
 import UserDetailsPhoto from "../../assets/images/userDetailsBasicPhoto.jpg";
 import {UserRole} from "../../services/user-service";
 import CreateUpdateVehicleModal from "../../components/modals/vehicle-modal";
@@ -12,7 +11,6 @@ const UserDetails = ({id}) => {
     const {isAuthorized, loggedUserRole} = useAuthContext();
     const [openVehicleModal, setOpenVehicleModal] = useState(false);
     const {user, vehicle} = useLoaderData();
-    console.log(vehicle);
 
     return (user &&
         <Grid container component={"main"}>

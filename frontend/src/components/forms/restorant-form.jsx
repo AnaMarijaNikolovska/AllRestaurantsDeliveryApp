@@ -30,13 +30,16 @@ const RestorantForm = ({restorant, onClose}) => {
             return;
         }
 
-        let restorantId = await CreateRestorant(formData)
-        navigate(`/restorants/${restorantId}`);
+        let restorantId = await CreateRestorant(formData);
+
+        if (restorantId) {
+            navigate(`/restorants/${restorantId}`);
+        }
     }
 
     return (<form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
-            <Grid item xs={12} >
+            <Grid item xs={12}>
                 <TextField
                     onChange={handleChange("ime")}
                     name="ime"
@@ -50,7 +53,7 @@ const RestorantForm = ({restorant, onClose}) => {
                     }}
                 />
             </Grid>
-            <Grid item xs={12} >
+            <Grid item xs={12}>
                 <TextField
                     onChange={handleChange("lokacija")}
                     variant="outlined"

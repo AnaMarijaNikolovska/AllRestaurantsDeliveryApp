@@ -1,4 +1,4 @@
-import {Button, Grid, TextField} from "@mui/material";
+import {Button, FormControl, Grid, InputAdornment, TextField} from "@mui/material";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {useAuthContext} from "../../configurations/AuthContext";
@@ -33,11 +33,12 @@ const MenuItemForm = ({menuItem, restorantId = undefined, onClose}) => {
         navigate(location.pathname);
     }
 
-    return (<form onSubmit={handleSubmit}>
+    return (<form onSubmit={handleSubmit} className={"m-2"}>
         <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
                 <TextField
                     onChange={handleChange("ime")}
+                    id="ime"
                     name="ime"
                     variant="outlined"
                     required
@@ -59,8 +60,8 @@ const MenuItemForm = ({menuItem, restorantId = undefined, onClose}) => {
                     type="number"
                     name="cena"
                     value={formData.cena}
-                    inputProps={{
-                        minLength: 2,
+                    InputProps={{
+                        startAdornment: <InputAdornment position="start">MKD</InputAdornment>,
                     }}
                 />
             </Grid>

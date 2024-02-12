@@ -10,7 +10,10 @@ import {
     Route,
     RouterProvider
 } from "react-router-dom";
+
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
+
 import axios from "axios";
 import Root from "./routes/root";
 import Login from "./routes/user/login";
@@ -28,10 +31,10 @@ import {orderLoader} from "./loaders/order-loader";
 import RestorantsPage from "./routes/restourant/restaurants-page";
 import {menuItemLoader} from "./loaders/menu-item-loader";
 import MenuItemsListPage from "./routes/menuItems/menu-items-list-page";
-import {loadStripe} from "@stripe/stripe-js";
 import {PublishableStripeKey} from "./services/payment-service";
 import UserOrders from "./routes/user/user-orders";
 import UserPayments from "./routes/user/user-payments";
+import {toast} from "react-toastify";
 
 const credentials = JSON.parse(sessionStorage.getItem("authData"));
 
@@ -42,18 +45,21 @@ if (credentials) {
 }
 
 axios.interceptors.response.use((response) => {
+    if (response.config.method !== "get") {
+        toast.success("Success", {
+            toastId: "custom-id-success"
+        })
+    }
     return response;
 }, function (error) {
-    // Do something with response error
+    console.log(error);
+    toast.error(error.message)
+
     if (error.response.status === 404) {
-        console.log('unauthorized, logging out ...');
         redirect('/');
     }
     return Promise.reject(error.response);
 });
-
-const stripePromise = loadStripe(PublishableStripeKey);
-
 
 const router = createBrowserRouter(
     createRoutesFromElements([
@@ -61,7 +67,7 @@ const router = createBrowserRouter(
             <StandardLayout>
                 <Root/>
             </StandardLayout>}/>,
-        <Route path="/restaurants" loader={rootLoader} element={
+        <Route path="/restorants" loader={rootLoader} element={
             <StandardLayout>
                 <RestorantsPage/>
             </StandardLayout>}/>,
@@ -87,7 +93,7 @@ const router = createBrowserRouter(
             <StandardLayout>
                 <UserPayments/>
             </StandardLayout>}/>,
-        <Route path="/menuItems" loader={menuItemLoader} element={
+        <Route path="/menu-items" loader={menuItemLoader} element={
             <StandardLayout>
                 <MenuItemsListPage/>
             </StandardLayout>}/>,

@@ -1,4 +1,5 @@
 import axios from "axios";
+import {toast} from 'react-toastify';
 
 const usersRoute = "/users";
 
@@ -22,10 +23,10 @@ const LoginUser = async (loginForm) => {
         const response = await axios.post(`${usersRoute}/login`, loginForm);
         axios.defaults.headers.common['Authorization'] = BasicAuth(response.data.username, response.data.password);
 
+        toast.success("Welcome back");
         return response.data;
     } catch (error) {
         console.error("Error fetching restaurants:", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 }
 
@@ -47,7 +48,6 @@ const getUserById = async (id) => {
         return response.data;
     } catch (error) {
         console.error("Error fetching restaurants:", error);
-        throw error; // Re-throw the error to be handled by the caller
     }
 }
 
