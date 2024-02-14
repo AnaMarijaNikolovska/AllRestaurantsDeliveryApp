@@ -1,109 +1,74 @@
 import {Button, Grid, TextField} from "@mui/material";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useState} from "react";
-import {RegisterUser} from "../../services/user-service";
-import {toast} from "react-toastify";
+import {UpdateUser, UserRole} from "../../services/user-service";
 
-const UserForm = (props
-) => {
+const UserForm = ({editUser, ...props}) => {
     const navigate = useNavigate();
     const [user, setUser] = useState({
-        username: "",
-        password: "",
-        name: "",
-        surname: "",
-        email: "",
-        roleType: props?.location?.state?.roleType
+        username: editUser?.username ?? "",
+        password: editUser?.password ?? "",
+        email: editUser?.email ?? "",
+        address: editUser?.address ?? "",
+        phoneNumber: editUser?.phoneNumber ?? "",
+        role: props.editUser?.role ?? ""
     });
-
-    const chooseRole = role => {
-        setUser({...user, roleType: role});
-    }
 
     const handleChange = name => event => {
         setUser({...user, [name]: event.target.value});
     };
 
-    const handleSubmit = event => {
+    const handleSubmit = async event => {
         event.preventDefault();
 
-        RegisterUser(user)
-            .then(() => {
-                navigate("login");
-                toast("Successfuly registered")
-            })
+        await UpdateUser(editUser.id, user)
+        // navigate(0);
+        props.onClose();
     }
 
-
-    return (<form onSubmit={handleSubmit}>
+    return (<form onSubmit={handleSubmit} className={"m-3"}>
         <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-                <TextField
-                    onChange={handleChange("name")}
-                    name="firstName"
-                    variant="outlined"
-                    required
-                    fullWidth
-                    id="firstName"
-                    label="First Name"
-                    autoFocus
-                    inputProps={{
-                        minLength: 2,
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <TextField
-                    onChange={handleChange("surname")}
-                    variant="outlined"
-                    required
-                    fullWidth
-                    id="lastName"
-                    label="Last Name"
-                    name="lastName"
-                    inputProps={{
-                        minLength: 2,
-                    }}
-                />
-            </Grid>
+            {editUser.role === UserRole.User &&
+                <>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            onChange={handleChange("address")}
+                            name="address"
+                            variant="outlined"
+                            fullWidth
+                            value={user.address}
+                            id="address"
+                            label="Address"
+                            inputProps={{
+                                minLength: 2,
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            onChange={handleChange("phoneNumber")}
+                            variant="outlined"
+                            value={user.phoneNumber}
+                            fullWidth
+                            id="phone"
+                            label="Phone"
+                            name="phone"
+                            inputProps={{
+                                minLength: 2,
+                            }}
+                        />
+                    </Grid>
+                </>}
             <Grid item xs={12}>
                 <TextField
                     onChange={handleChange("email")}
                     variant="outlined"
                     required
                     fullWidth
+                    value={user.email}
                     id="email"
                     label="Email Address"
                     name="email"
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <TextField
-                    onChange={handleChange("username")}
-                    variant="outlined"
-                    required
-                    fullWidth
-                    id="username"
-                    label="Username"
-                    name="username"
-                    inputProps={{
-                        minLength: 2,
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <TextField
-                    onChange={handleChange("password")}
-                    variant="outlined"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    inputProps={{
-                        minLength: 6,
-                    }}
                 />
             </Grid>
         </Grid>
@@ -111,16 +76,10 @@ const UserForm = (props
             type="submit"
             fullWidth
             variant="contained"
+            className={"mt-3"}
         >
-            Sign Up
+            Update
         </Button>
-        <Grid container justify="flex-end" className={"mt-3"}>
-            <Grid item>
-                <Link to={"/login"}>
-                    Already have an account? Sign in
-                </Link>
-            </Grid>
-        </Grid>
     </form>)
 }
 

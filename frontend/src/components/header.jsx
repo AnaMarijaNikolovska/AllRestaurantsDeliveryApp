@@ -126,10 +126,16 @@ const Header = props => {
                         Menu Items
                     </Button>
                     {[UserRole.Vozac, UserRole.Admin].includes(loggedUserRole?.role) && <Button
-                        onClick={() => navigate("/orders")}
+                        onClick={() => navigate("/orders?active=true")}
                         sx={{my: 2, color: 'white', display: 'block'}}
                     >
-                        Orders
+                        Active Orders
+                    </Button>}
+                    {[UserRole.Admin].includes(loggedUserRole?.role) && <Button
+                        onClick={() => navigate("/orders?active=false")}
+                        sx={{my: 2, color: 'white', display: 'block'}}
+                    >
+                        Finished Orders
                     </Button>}
                 </Box>
                 <Box sx={{flexGrow: 0}}>
@@ -138,7 +144,13 @@ const Header = props => {
                             <Link to="/register" className={"nav-link h6 m-2"}>REGISTER</Link>
                         </div> :
                         <>
-
+                            {[UserRole.Admin, UserRole.Menager].includes(loggedUserRole.role) &&
+                                < Button onClick={() => navigate(loggedUserRole.activeOwnershipId
+                                    ? `/restorants/${loggedUserRole.activeOwnershipId}`
+                                    : "restorants/create")}
+                                         sx={{my: 2, color: 'white'}}>
+                                    {loggedUserRole.activeOwnershipId ? "Manage" : "Create"} Restaurant
+                                </Button>}
                             <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
                                 <FaceIcon style={{color: 'white'}}/>
                             </IconButton>

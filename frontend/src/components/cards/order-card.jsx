@@ -1,10 +1,10 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useState} from "react";
 import {Button, Card, CardActions, CardContent, CardHeader, Grid, Typography} from "@mui/material";
 import MenuItemCard from "./menu-item-card";
 import {calculateTotalPrice, formatDate} from "../functions";
 import {useAuthContext} from "../../configurations/AuthContext";
 import {AssignOrderAdmin, AssignOrderDriver, OrderStatus, UpdateOrder} from "../../services/order-service";
-import {useLocation, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {UserRole} from "../../services/user-service";
 import PaymentModal from "../modals/payment-modal";
 
@@ -15,8 +15,7 @@ const OrderCard = ({order}) => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    useEffect(() => {
-    }, [naracka]);
+    const [detectAdminAction, setDetectAdminAction] = useState(false);
 
     const handleSaveNaracka = async (status) => {
         let updatedOrder = {
@@ -25,6 +24,7 @@ const OrderCard = ({order}) => {
             menuItems: naracka.narackaMenuItems.map(nmp => ({menuItemId: nmp?.menuItem?.id, quantity: nmp.quantity}))
         }
 
+        setNaracka({...naracka, status: status});
         await UpdateOrder(naracka.id, updatedOrder)
         navigate(location.pathname, {replace: true});
     }
@@ -87,7 +87,15 @@ const OrderCard = ({order}) => {
 
     return (
         naracka && <Card variant="elevation" className={"m-1"}>
-            <CardHeader title={`NARACKA BROJ #${order.id}`}/>
+            <CardHeader title={`NARACKA BROJ #${order.id}`}
+                        subheader={<div>
+                            <div>User:
+                                <Link
+                                    to={`/users/${order?.potrosuvac?.korisnik?.id}`}> {order?.potrosuvac?.korisnik?.username} </Link>
+                            </div>
+                            <div>Address: {order?.potrosuvac?.address}</div>
+                            <div>Contact: {order?.potrosuvac?.phoneNumber}</div>
+                        </div>}/>
             <CardContent className={"d-flex flex-column align-content-center justify-content-center"}>
                 <Typography className={"text-center"} variant="h5">
                     {formatDate(order.datum)}
@@ -96,12 +104,12 @@ const OrderCard = ({order}) => {
                     <i>{order.status}</i>
                 </Typography>
 
-                {order.narackaMenuItems && order.narackaMenuItems.length > 0 && order.narackaMenuItems.map((narackaMenu) =>
-                    <div key={narackaMenu.id}>
-                        <MenuItemCard item={narackaMenu.menuItem} quantitynb={narackaMenu.quantity}
-                                      skipChanges={order.status === OrderStatus.PendingAdminApproval}
-                                      itemchange={handleAddRemoveToNaracka}/>
-                    </div>)}
+                {naracka.narackaMenuItems && naracka.narackaMenuItems.length > 0 && naracka.narackaMenuItems.map((narackaMenu) => narackaMenu.quantity > 0 &&
+                    <MenuItemCard key={narackaMenu.id} item={narackaMenu.menuItem} quantitynb={narackaMenu.quantity}
+                                  skipChanges={naracka.status !== OrderStatus.PendingUserApproval}
+                                  detectAdminAction={() => window.location.reload()}
+                                  itemchange={handleAddRemoveToNaracka}/>
+                )}
             </CardContent>
             <CardActions>
                 <Grid container>
@@ -118,14 +126,14 @@ const OrderCard = ({order}) => {
                                 <Button onClick={() => setOpenPaymentModal(true)}>Pay now</Button>
                             </>}
 
-                        {loggedUserRole?.role === UserRole.Admin &&
+                        {loggedUserRole?.role === UserRole.Admin && ![OrderStatus.Finished, OrderStatus.Terminated, OrderStatus.PendingUserApproval].includes(order.status) &&
                             <>
-                                {order.status !== OrderStatus.Approved &&
+                                {![OrderStatus.Finished, OrderStatus.Approved, OrderStatus.Delivering].includes(order.status) &&
                                     <Button onClick={() => handleAssignAdmin(OrderStatus.Approved)}>Approve</Button>}
-                                {order.status !== OrderStatus.Terminated &&
+                                {![OrderStatus.Finished, OrderStatus.Terminated].includes(order.status) &&
                                     <Button onClick={() => handleAssignAdmin(OrderStatus.Terminated)}>Reject
                                         Order</Button>}
-                                {order.status !== OrderStatus.Finished &&
+                                {![OrderStatus.Finished, OrderStatus.PendingAdminApproval].includes(order.status) &&
                                     <Button onClick={() => handleAssignAdmin(OrderStatus.Finished)}>Finish
                                         Order</Button>}
                             </>}
@@ -135,7 +143,9 @@ const OrderCard = ({order}) => {
                                 {order.status !== OrderStatus.Delivering &&
                                     < Button onClick={() => handleAssignVozac(OrderStatus.Delivering)}>Pick up
                                         Order</Button>}
-                                < Button onClick={() => handleAssignVozac(OrderStatus.Finished)}>Finish Order</Button>
+                                {![OrderStatus.Finished, OrderStatus.PendingAdminApproval, OrderStatus.Approved].includes(order.status) &&
+                                    < Button onClick={() => handleAssignVozac(OrderStatus.Finished)}>Finish
+                                        Order</Button>}
                                 < Button onClick={() => handleAssignVozac(OrderStatus.Terminated)}>Cancel Order</Button>
                             </>}
                     </Grid>

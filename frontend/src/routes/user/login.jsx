@@ -32,19 +32,20 @@ const Login = () => {
             userCredential: BasicAuth(response.username, response.password),
             userId: response.id,
             userRole: response.role,
-            userRoleId: response.roleId
+            userRoleId: response.roleId,
+            activeOwnershipId: response.activeOwnershipId
         }
 
         let roleUser = {
             roleId: response.roleId,
-            role: response.role
+            role: response.role,
+            activeOwnershipId: response.activeOwnershipId
         }
 
         sessionStorage.setItem('authData', JSON.stringify(authData));
 
         login(response.id, roleUser);
         navigate("/");
-        toast(`Welcome back ${user.username}`);
     }
 
     return (loggedUser ? redirect("/") :

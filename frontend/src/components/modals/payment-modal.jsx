@@ -1,17 +1,17 @@
 import StripeCheckout from "react-stripe-checkout";
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography} from "@mui/material";
+import {Button, Dialog, DialogContent, DialogTitle, IconButton} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import {CreatePayment, PaymentType, PublishableStripeKey, UpdatePayment} from "../../services/payment-service";
+import {CreatePayment, PaymentType, PublishableStripeKey} from "../../services/payment-service";
 import {useAuthContext} from "../../configurations/AuthContext";
 import {calculateTotalPrice} from "../functions";
 import {AttachMoneyOutlined, CreditCard} from "@mui/icons-material";
-import {useState} from "react";
+import React, {useState} from "react";
 import {OrderStatus, UpdateOrder} from "../../services/order-service";
 import {useLocation, useNavigate} from "react-router-dom";
 
 const PaymentModal = ({naracka, ...props}) => {
 
-    const {loggedUserRole} = useAuthContext();
+    const {loggedUserRole, ownershipChanges} = useAuthContext();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -24,19 +24,21 @@ const PaymentModal = ({naracka, ...props}) => {
             narackaId: naracka.id
         }
 
-        await CreatePayment(requestPayment)
+        await CreatePayment(requestPayment);
+        ownershipChanges(null);
         navigate(location.pathname, {replace: true});
         props.onClose();
     }
 
     const handleCashPayment = async () => {
-        const approval = window.confirm("Are you sure you want to proceed with your order ?");
+        let totalPrice = calculateTotalPrice(naracka?.narackaMenuItems);
+        const approval = window.confirm(`Are you sure you want to proceed with your order ? \n Total Amount to pay: ${totalPrice} `);
 
         let paymentRequest = {
             potrosuvacId: naracka?.potrosuvac?.id,
             narackaId: naracka?.id,
             paymentType: PaymentType.Cash,
-            totalPrice: calculateTotalPrice(naracka?.narackaMenuItems),
+            totalPrice: totalPrice
         }
 
         if (approval) {
@@ -50,8 +52,9 @@ const PaymentModal = ({naracka, ...props}) => {
             }
 
             await UpdateOrder(naracka.id, updatedOrder)
-            await CreatePayment(paymentRequest)
-            navigate(location.pathname, {replace: true});
+            await CreatePayment(paymentRequest);
+            ownershipChanges(null);
+            navigate(0);
             props.onClose();
         }
     }
@@ -76,7 +79,9 @@ const PaymentModal = ({naracka, ...props}) => {
             </DialogTitle>
             <DialogContent className={"mb-3 d-flex justify-content-evenly"}>
                 <Button variant={"contained"} color={"success"} size={"small"}
-                        onClick={() => handleCashPayment()}>Cash<AttachMoneyOutlined/></Button>
+                        onClick={() => handleCashPayment()}>
+                    Cash <AttachMoneyOutlined/>
+                </Button>
 
                 <StripeCheckout
                     amount={calculateTotalPrice(naracka?.narackaMenuItems) * 100}

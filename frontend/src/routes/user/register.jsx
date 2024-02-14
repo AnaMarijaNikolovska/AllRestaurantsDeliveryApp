@@ -32,7 +32,6 @@ const Register = (props) => {
         RegisterUser(user)
             .then(() => {
                 navigate("/login");
-                toast("Successfuly registered")
             })
     }
 

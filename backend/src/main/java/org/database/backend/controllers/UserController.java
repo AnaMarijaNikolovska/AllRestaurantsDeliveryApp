@@ -1,5 +1,6 @@
 package org.database.backend.controllers;
 
+import org.database.backend.models.Manager;
 import org.database.backend.models.responses.CustomUserDetails;
 import org.database.backend.models.Korisnik;
 import org.database.backend.models.dto.UserDto;
@@ -12,7 +13,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "api/users")
-//@CrossOrigin("http://localhost:3000/")
 public class UserController {
     private final KorisnikService userService;
 
@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping("{id}")
-    public Optional<CustomUserDetails> getById(@PathVariable Integer id) {
+    public Optional<CustomUserDetails> getById(@PathVariable Integer id) throws Exception {
         return userService.findById(id);
     }
 
@@ -35,8 +35,18 @@ public class UserController {
         return userService.save(userDto);
     }
 
+    @PostMapping("{id}")
+    public void updateUser(@PathVariable Integer id, @RequestBody UserDto userDto) throws Exception {
+        userService.update(id, userDto);
+    }
+
     @PostMapping("login")
     public CustomUserDetails loginUser(@RequestBody UserLoginDto userLoginDto) throws Exception {
         return userService.loginUser(userLoginDto);
+    }
+
+    @GetMapping("managers/inactive")
+    public List<Manager> getAllManagersWithoutRestourants() {
+        return userService.findAllManagersWithoutRestourants();
     }
 }

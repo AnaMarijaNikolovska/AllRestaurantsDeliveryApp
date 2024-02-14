@@ -1,6 +1,9 @@
 package org.database.backend.services.impl;
 
-import org.database.backend.models.*;
+import org.database.backend.models.Korisnik;
+import org.database.backend.models.Manager;
+import org.database.backend.models.Potrosuvac;
+import org.database.backend.models.Vozac;
 import org.database.backend.models.dto.UserDto;
 import org.database.backend.models.dto.UserLoginDto;
 import org.database.backend.models.enums.Role;
@@ -9,7 +12,9 @@ import org.database.backend.repositories.*;
 import org.database.backend.services.KorisnikService;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,12 +27,15 @@ public class KorisnikServieImpl implements KorisnikService {
     private final PotrosuvacRepository potrosuvacRepository;
     private final VozacRepository vozacRepository;
 
-    public KorisnikServieImpl(KorisnikRepository korisnikRepository, AdminRepository adminRepository, ManagerRepository managerRepository, PotrosuvacRepository potrosuvacRepository, VozacRepository vozacRepository) {
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public KorisnikServieImpl(KorisnikRepository korisnikRepository, AdminRepository adminRepository, ManagerRepository managerRepository, PotrosuvacRepository potrosuvacRepository, VozacRepository vozacRepository, BCryptPasswordEncoder passwordEncoder) {
         this.korisnikRepository = korisnikRepository;
         this.adminRepository = adminRepository;
         this.managerRepository = managerRepository;
         this.potrosuvacRepository = potrosuvacRepository;
         this.vozacRepository = vozacRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<Korisnik> findAll() {
@@ -35,8 +43,13 @@ public class KorisnikServieImpl implements KorisnikService {
     }
 
     @Override
-    public Optional<CustomUserDetails> findById(Integer id) {
+    public Optional<CustomUserDetails> findById(Integer id) throws Exception {
         return korisnikRepository.findUserById(id);
+    }
+
+    @Override
+    public List<Manager> findAllManagersWithoutRestourants() {
+        return managerRepository.findALlManagersWithoutRestourants();
     }
 
     @Override
@@ -48,12 +61,14 @@ public class KorisnikServieImpl implements KorisnikService {
         return user;
     }
 
+    @Transactional
+    @Override
     public Integer save(UserDto userDto) {
         if (userDto == null) {
             return null;
         }
 
-        Korisnik korisnik = new Korisnik(userDto.getEmail(), userDto.getUsername(), userDto.getPassword());
+        Korisnik korisnik = new Korisnik(userDto.getEmail(), userDto.getUsername(), passwordEncoder.encode(userDto.getPassword()));
         korisnikRepository.save(korisnik);
 
         switch (Role.valueOf(userDto.getRole())) {
@@ -85,6 +100,26 @@ public class KorisnikServieImpl implements KorisnikService {
         }
 
         return korisnik.getId();
+    }
+
+    @Transactional
+    @Override
+    public void update(Integer id, UserDto userDto) throws Exception {
+        Korisnik korisnik = korisnikRepository.findById(id).orElseThrow(() -> new Exception("Not found"));
+        korisnik.setUsername(userDto.getUsername());
+        korisnik.setEmail(userDto.getEmail());
+
+        if (korisnik.getRole() == Role.USER) {
+            Potrosuvac potrosuvac = potrosuvacRepository
+                    .findByKorisnikId(korisnik.getId()).orElseThrow(() -> new Exception("Not found"));
+
+            potrosuvac.setAddress(userDto.getAddress());
+            potrosuvac.setPhoneNumber(userDto.getPhoneNumber());
+
+            potrosuvacRepository.save(potrosuvac);
+        }
+
+        korisnikRepository.save(korisnik);
     }
 
     @Override

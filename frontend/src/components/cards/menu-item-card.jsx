@@ -9,12 +9,11 @@ import {UserRole} from "../../services/user-service";
 import {AddCircle, RemoveCircle, Restaurant} from "@mui/icons-material";
 import MenuItem from "../../assets/images/menuItem.jpg";
 
-const MenuItemCard = ({item, restorant, itemchange, quantitynb, skipChanges = false}) => {
-    const [openUpdateModal, setOpenUpdateModal] = useState(false);
+const MenuItemCard = ({item, itemchange, quantitynb, detectAdminAction, skipChanges = false}) => {
+    const {loggedUserRole, isAuthorized} = useAuthContext();
     const navigate = useNavigate();
     const location = useLocation();
-    const {loggedUserRole, isAuthorized} = useAuthContext();
-
+    const [openUpdateModal, setOpenUpdateModal] = useState(false);
     const [quantity, setQuantity] = useState(quantitynb ?? 0);
 
     const handleMenuOrderQuantityChange = (number) => event => {
@@ -30,11 +29,19 @@ const MenuItemCard = ({item, restorant, itemchange, quantitynb, skipChanges = fa
     const handleDelete = async (id) => {
         await DeleteMenuItem(id);
         navigate(location.pathname);
+
+        if (detectAdminAction) {
+            detectAdminAction(true)
+        }
     }
 
     const handleEdit = () => {
-        setOpenUpdateModal(false)
+        setOpenUpdateModal(false);
         navigate(location.pathname);
+
+        if (detectAdminAction) {
+            detectAdminAction(true)
+        }
     }
 
     return (
@@ -82,7 +89,7 @@ const MenuItemCard = ({item, restorant, itemchange, quantitynb, skipChanges = fa
 
             </CardContent>
             <CardActions>
-                {(isAuthorized(restorant?.manager?.id) || loggedUserRole?.role === UserRole.Admin) &&
+                {(isAuthorized(item.restoran?.manager?.id) || loggedUserRole?.role === UserRole.Admin) &&
                     <>
                         <Button onClick={() => setOpenUpdateModal(true)}>
                             Edit

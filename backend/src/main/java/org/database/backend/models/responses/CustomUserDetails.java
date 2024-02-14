@@ -15,11 +15,14 @@ public class CustomUserDetails extends Korisnik {
 
     private Integer roleId;
 
-    public CustomUserDetails(Integer id, String email, String username, String password, Role role, Integer roleId, String address, String phoneNumber) {
+    private Integer activeOwnershipId;
+
+    public CustomUserDetails(Integer id, String email, String username, String password, Role role, Integer roleId, String address, String phoneNumber, Integer activeOwnershipId) {
         super(email, username, password, role);
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.id = id;
         this.roleId = roleId;
+        this.activeOwnershipId = activeOwnershipId;
     }
 }

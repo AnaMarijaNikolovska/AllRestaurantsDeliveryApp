@@ -5,12 +5,7 @@ import {UserRole} from "../../services/user-service";
 import UserForm from "../forms/user-form";
 
 
-const EditUserModal = ({roleset, ...props}) => {
-
-    const handleRole = role => {
-        props.onClose();
-        roleset(role);
-    }
+const EditUserModal = ({user, ...props}) => {
 
     return (
         <Dialog
@@ -22,13 +17,13 @@ const EditUserModal = ({roleset, ...props}) => {
         >
             <DialogTitle variant="h4" disabletypography="true" id={"choose-role-title"}
                          className={"text-center font-weight-bolder"}>
-                Choose
+                Edit user
                 <IconButton className={"float-end"} aria-label="close" onClick={() => props.onClose()}>
                     <CloseIcon/>
                 </IconButton>
             </DialogTitle>
             <DialogContent className={"mb-3"}>
-                <UserForm onClose={props.onClose}/>
+                <UserForm editUser={user} onClose={props.onClose}/>
             </DialogContent>
         </Dialog>
     )

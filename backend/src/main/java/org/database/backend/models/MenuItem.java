@@ -31,7 +31,7 @@ public class MenuItem implements Serializable {
     @JoinColumn(name = "restoran_id")
     private Restoran restoran;
 
-    @OneToMany(mappedBy = "menuItem")
+    @OneToMany(mappedBy = "menuItem", orphanRemoval = true)
     @JsonIgnore
     private List<NarackaMenuItem> narackaMenuItems = new ArrayList<>();
 

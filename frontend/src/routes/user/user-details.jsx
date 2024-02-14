@@ -5,12 +5,14 @@ import {useLoaderData} from "react-router-dom";
 import UserDetailsPhoto from "../../assets/images/userDetailsBasicPhoto.jpg";
 import {UserRole} from "../../services/user-service";
 import CreateUpdateVehicleModal from "../../components/modals/vehicle-modal";
+import UserModal from "../../components/modals/user-modal";
 
 
 const UserDetails = ({id}) => {
     const {isAuthorized, loggedUserRole} = useAuthContext();
     const [openVehicleModal, setOpenVehicleModal] = useState(false);
     const {user, vehicle} = useLoaderData();
+    const [openUpdateModal, setOpenUpdateModal] = useState(false);
 
     return (user &&
         <Grid container component={"main"}>
@@ -43,14 +45,14 @@ const UserDetails = ({id}) => {
                     </Typography>
                 </Grid>
                 {loggedUserRole?.role === UserRole.Potrosuvac &&
-                <Grid>
-                    <Typography className={"mt-3"} variant={"body1"}>
-                        <b> PhoneNumber:</b> {user.phoneNumber}
-                    </Typography>
-                    <Typography className={"mt-3"} variant={"body1"}>
-                        <b> Address:</b> {user.address}
-                    </Typography>
-                </Grid>}
+                    <Grid>
+                        <Typography className={"mt-3"} variant={"body1"}>
+                            <b> PhoneNumber:</b> {user.phoneNumber}
+                        </Typography>
+                        <Typography className={"mt-3"} variant={"body1"}>
+                            <b> Address:</b> {user.address}
+                        </Typography>
+                    </Grid>}
 
                 {loggedUserRole?.role === UserRole.Vozac &&
                     <Grid className={"mt-5"}>
@@ -68,6 +70,7 @@ const UserDetails = ({id}) => {
                         <Button onClick={() => setOpenVehicleModal(true)}>{vehicle ? "Edit" : "Add"} Vehicle</Button>
                     </Grid>
                 }
+                <Button className={"mt-5"} onClick={() => setOpenUpdateModal(true)}>Update user</Button>
 
             </Grid>
 
@@ -75,6 +78,11 @@ const UserDetails = ({id}) => {
             {openVehicleModal &&
                 <CreateUpdateVehicleModal vehicle={vehicle} open={openVehicleModal}
                                           onClose={() => setOpenVehicleModal(false)}/>}
+
+            {openUpdateModal &&
+                <UserModal user={user} open={openUpdateModal}
+                           onClose={() => setOpenUpdateModal(false)}/>}
+
 
         </Grid>
     )

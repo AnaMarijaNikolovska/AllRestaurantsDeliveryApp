@@ -1,6 +1,6 @@
 import {Grid} from "@mui/material";
 import RestoranCard from "../../components/cards/restoran-card";
-import {useLoaderData} from "react-router-dom";
+import {Link, useLoaderData} from "react-router-dom";
 const RestorantsPage= () => {
     const loaderData = useLoaderData();
     return(
@@ -12,6 +12,7 @@ const RestorantsPage= () => {
                         <RestoranCard restoran={restoran}/>
                     </Grid>
                 ))}
+            <Link to={"/restorants/create"}>Create </Link>
         </Grid>
     )
 }

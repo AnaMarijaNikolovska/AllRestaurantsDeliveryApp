@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class CreateNarackaDto {
+public class NarackaDto {
     private Integer potrosuvacId;
 
     private String status;

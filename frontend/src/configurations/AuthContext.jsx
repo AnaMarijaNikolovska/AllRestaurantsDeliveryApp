@@ -1,8 +1,7 @@
 import {createContext, useContext, useEffect, useState} from 'react'
-import {Navigate, redirect, useLocation, useNavigate} from "react-router-dom";
+import {Navigate, useLocation} from "react-router-dom";
 import {toast} from "react-toastify";
 import axios from "axios";
-import {BasicAuth} from "../services/user-service";
 
 const AuthContext = createContext(null);
 
@@ -15,7 +14,8 @@ const AuthProvider = props => {
         if (authData) {
             let roleUser = {
                 roleId: authData.userRoleId,
-                role: authData.userRole
+                role: authData.userRole,
+                activeOwnershipId: authData.activeOwnershipId
             }
 
             login(authData.userId, roleUser);
@@ -27,6 +27,14 @@ const AuthProvider = props => {
         setLoggedUserRole(role);
     }
 
+    const ownershipChanges = (value) => {
+        let authData = JSON.parse(sessionStorage.getItem("authData"));
+        authData.activeOwnershipId = value;
+        sessionStorage.setItem("authData", JSON.stringify(authData));
+
+        setLoggedUserRole({...loggedUserRole, value})
+    }
+
     const logout = () => {
         sessionStorage.removeItem("authData");
         toast.success('Logged out');
@@ -34,6 +42,8 @@ const AuthProvider = props => {
         setLoggedUser(null);
         setLoggedUserRole(null);
         axios.defaults.headers.common['Authorization'] = null;
+
+        window.location.reload();
     }
 
     const isAuthorized = (id) => {
@@ -49,8 +59,11 @@ const AuthProvider = props => {
             value={{
                 loggedUser: loggedUser,
                 loggedUserRole: loggedUserRole,
+                setLoggedUser: setLoggedUser,
+                setLoggedUserRole: setLoggedUserRole,
                 login: login,
                 logout: logout,
+                ownershipChanges,
                 isAuthorized: isAuthorized,
             }}
         >
@@ -82,10 +95,9 @@ const RequireAuth = ({children}) => {
 
 const SkipAuth = ({children}) => {
     let auth = useAuthContext();
-    let location = useLocation();
 
-    if (auth.user) {
-        return <Navigate to={location} replace/>;
+    if (auth.loggedUser) {
+        return <Navigate to={"/"} replace/>;
     }
 
     return children;

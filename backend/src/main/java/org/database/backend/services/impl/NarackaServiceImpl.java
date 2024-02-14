@@ -1,7 +1,7 @@
 package org.database.backend.services.impl;
 
 import org.database.backend.models.*;
-import org.database.backend.models.dto.CreateNarackaDto;
+import org.database.backend.models.dto.NarackaDto;
 import org.database.backend.models.dto.NarackaAdminDto;
 import org.database.backend.models.dto.NarackaMenuItemDto;
 import org.database.backend.models.dto.NarackaVozacDto;
@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class NarackaServiceImpl implements NarackaService {
@@ -50,8 +51,18 @@ public class NarackaServiceImpl implements NarackaService {
     }
 
     @Override
+    public List<Naracka> findAllByStatusesIn(List<OrderStatus> orderStatuses) {
+        return narackaRepository.findAllByStatusInOrderByIdDesc(orderStatuses);
+    }
+
+    @Override
     public Naracka findNarackaById(Integer naracka_id) throws Exception {
         return narackaRepository.findById(naracka_id).orElseThrow(() -> new Exception("Order is not found."));
+    }
+
+    @Override
+    public Optional<Naracka> findActiveNarackaByPotrosuvacId(Integer id) {
+        return narackaRepository.findActiveNarackaByPotrosuvacId(id);
     }
 
     @Override
@@ -61,11 +72,11 @@ public class NarackaServiceImpl implements NarackaService {
 
     @Override
     public List<Naracka> findAllNarackiByPotrosuvac(Integer id) {
-        return narackaRepository.findAllByPotrosuvacId(id);
+        return narackaRepository.findAllByPotrosuvacIdOrderByIdDesc(id);
     }
 
     @Override
-    public Integer saveNaracka(CreateNarackaDto naracka) throws Exception {
+    public Integer saveNaracka(NarackaDto naracka) throws Exception {
 
         if (naracka.getMenuItems().isEmpty()) {
             return 0;
@@ -89,7 +100,7 @@ public class NarackaServiceImpl implements NarackaService {
 
     @Override
     @Transactional
-    public void editNaracka(Integer id, CreateNarackaDto naracka) throws Exception {
+    public void editNaracka(Integer id, NarackaDto naracka) throws Exception {
         Naracka updateNaracka = findNarackaById(id);
 
         narackaMenuItemRepository.deleteAllByNarackaId(id);

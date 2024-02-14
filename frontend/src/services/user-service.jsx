@@ -1,5 +1,4 @@
 import axios from "axios";
-import {toast} from 'react-toastify';
 
 const usersRoute = "/users";
 
@@ -14,16 +13,11 @@ const BasicAuth = (username, password) => {
     return 'Basic ' + window.btoa(username + ":" + password);
 }
 
-// const LoginUser = (loginForm) => {
-//     return axios.post(`${usersRoute}/login`, loginForm)
-// }
-
 const LoginUser = async (loginForm) => {
     try {
         const response = await axios.post(`${usersRoute}/login`, loginForm);
         axios.defaults.headers.common['Authorization'] = BasicAuth(response.data.username, response.data.password);
 
-        toast.success("Welcome back");
         return response.data;
     } catch (error) {
         console.error("Error fetching restaurants:", error);
@@ -34,6 +28,15 @@ const RegisterUser = (userForm) => {
     return axios.post(`${usersRoute}`, userForm);
 }
 
+const UpdateUser = async (id, loginForm) => {
+    try {
+        const response = await axios.post(`${usersRoute}/${id}`, loginForm);
+        return response.data;
+    } catch (error) {
+        console.error("An Error Occured:", error);
+    }
+}
+
 const GetUser = (username) => {
     return axios.get(`${usersRoute}/${username}`);
 }
@@ -42,7 +45,7 @@ const GetAllUsers = () => {
     return axios.get(`${usersRoute}`);
 }
 
-const getUserById = async (id) => {
+const GetUserById = async (id) => {
     try {
         const response = await axios.get(`${usersRoute}/${id}`);
         return response.data;
@@ -51,4 +54,23 @@ const getUserById = async (id) => {
     }
 }
 
-export {UserRole, LoginUser, RegisterUser, GetUser, GetAllUsers, getUserById, BasicAuth}
+const GetInactiveManagers = async () => {
+    try {
+        const response = await axios.get(`${usersRoute}/managers/inactive`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching restaurants:", error);
+    }
+}
+
+export {
+    UserRole,
+    LoginUser,
+    RegisterUser,
+    GetUser,
+    GetAllUsers,
+    GetUserById,
+    UpdateUser,
+    GetInactiveManagers,
+    BasicAuth
+}

@@ -1,27 +1,47 @@
-import {Button, Container, Grid, TextField} from "@mui/material";
-import {useLocation, useNavigate} from "react-router-dom";
+import {Button, Grid, MenuItem, Select, TextField} from "@mui/material";
+import {useLoaderData, useLocation, useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {useAuthContext} from "../../configurations/AuthContext";
 import {CreateRestorant, UpdateRestorant} from "../../services/restoran-service";
+import {UserRole} from "../../services/user-service";
 
 const RestorantForm = ({restorant, onClose}) => {
     const navigate = useNavigate();
     const location = useLocation();
+    const {inactiveMenagers} = useLoaderData();
+    const [error, setError] = useState(false);
 
     const {loggedUserRole} = useAuthContext();
     const [formData, setFormData] = useState({
         ime: restorant?.ime ?? "",
         lokacija: restorant?.lokacija ?? "",
         rabotnoVreme: restorant?.rabotnoVreme ?? "",
-        managerId: restorant?.manager.id ?? loggedUserRole?.roleId
+        managerId: restorant?.manager.id ??
+        loggedUserRole?.role === UserRole.Menager
+            ? loggedUserRole.roleId
+            : 0
     });
 
     const handleChange = name => event => {
         setFormData({...formData, [name]: event.target.value});
+
+        if (name === "managerId" && event.target.value === 0) {
+            setError(true);
+            return;
+        }
+
+        setError(false)
     };
 
     const handleSubmit = async event => {
         event.preventDefault();
+
+        if (formData.managerId === 0) {
+            setError(true);
+
+            return;
+        }
+
         if (restorant) {
             await UpdateRestorant(restorant.id, formData)
             navigate(location.pathname);
@@ -68,7 +88,6 @@ const RestorantForm = ({restorant, onClose}) => {
                 />
             </Grid>
             <Grid item xs={12}>
-
                 <TextField
                     onChange={handleChange("rabotnoVreme")}
                     variant="outlined"
@@ -82,6 +101,26 @@ const RestorantForm = ({restorant, onClose}) => {
                     }}
                 />
             </Grid>
+            {!restorant && <Grid item xs={12}>
+                <Select
+                    value={formData.managerId}
+                    onChange={handleChange("managerId")}
+                    displayEmpty
+                    fullWidth
+                    labelId="demo-simple-select-error-label"
+                    id="demo-simple-select-error"
+                    error={error && formData.managerId === 0}
+                >
+                    <MenuItem value={0}>
+                        <em>None</em>
+                    </MenuItem>
+                    {inactiveMenagers && inactiveMenagers.length > 0 &&
+                        inactiveMenagers.map(manager =>
+                            <MenuItem key={manager.id}
+                                      value={manager.id}>{manager.korisnik.username}</MenuItem>)
+                    }
+                </Select>
+            </Grid>}
             <Grid item>
                 <Button
                     type="submit"

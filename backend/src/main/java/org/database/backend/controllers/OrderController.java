@@ -1,14 +1,16 @@
 package org.database.backend.controllers;
 
 import org.database.backend.models.Naracka;
-import org.database.backend.models.dto.CreateNarackaDto;
+import org.database.backend.models.dto.NarackaDto;
 import org.database.backend.models.dto.NarackaAdminDto;
 import org.database.backend.models.dto.NarackaVozacDto;
 import org.database.backend.models.enums.OrderStatus;
 import org.database.backend.services.NarackaService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -20,7 +22,16 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<Naracka> getAll(@RequestParam(value = "status", required = false) String status) {
+    public List<Naracka> getAll(@RequestParam(value = "statuses", required = false) List<String> statuses) {
+        if (statuses != null && !statuses.isEmpty()) {
+            List<OrderStatus> orderStatuses = new ArrayList<>();
+
+            statuses.forEach(s -> {
+                orderStatuses.add(OrderStatus.valueOf(s));
+            });
+            return narackaService.findAllByStatusesIn(orderStatuses);
+        }
+
         return narackaService.findAllNaracki();
     }
 
@@ -29,19 +40,24 @@ public class OrderController {
         return narackaService.findAllNarackiByPotrosuvac(id);
     }
 
+    @GetMapping("customer/{id}/active")
+    public Optional<Naracka> getActiveOrderByCustomerId(@PathVariable Integer id) {
+        return narackaService.findActiveNarackaByPotrosuvacId(id);
+    }
+
     @GetMapping("{id}")
     public Naracka getById(@PathVariable Integer id) throws Exception {
         return narackaService.findNarackaById(id);
     }
 
     @PostMapping
-    public Integer create(@RequestBody CreateNarackaDto createNarackaDto) throws Exception {
-        return narackaService.saveNaracka(createNarackaDto);
+    public Integer create(@RequestBody NarackaDto narackaDto) throws Exception {
+        return narackaService.saveNaracka(narackaDto);
     }
 
     @PostMapping("{id}")
-    public void update(@PathVariable Integer id, @RequestBody CreateNarackaDto createNarackaDto) throws Exception {
-        narackaService.editNaracka(id, createNarackaDto);
+    public void update(@PathVariable Integer id, @RequestBody NarackaDto narackaDto) throws Exception {
+        narackaService.editNaracka(id, narackaDto);
     }
 
     @DeleteMapping("{id}")

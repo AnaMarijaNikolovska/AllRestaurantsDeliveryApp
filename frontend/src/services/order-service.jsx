@@ -11,11 +11,11 @@ const OrderStatus = {
     Terminated: 'Terminated'
 }
 
-const GetAllOrders = async (status) => {
+const GetAllOrders = async (statuses) => {
     try {
         const response = await axios.get(`${orderRoute}`, {
             params: {
-                status: status
+                statuses: statuses
             }
         });
         return response.data;
@@ -87,6 +87,26 @@ const GetMyOrders = async (id) => {
     }
 };
 
+const OrderDomainToDtoMapper = (order) => {
+    if (!order)
+        return null;
+
+    return {
+        potrosuvacId: order.potrosuvac?.id,
+        status: order.status,
+        menuItems: order.narackaMenuItems?.map(nmp => ({menuItemId: nmp?.menuItem?.id, quantity: nmp.quantity})) ?? []
+    }
+}
+
+const GetActiveOrder = async (id) => {
+    try {
+        const response = await axios.get(`${orderRoute}/customer/${id}/active`);
+        return response.data;
+    } catch (error) {
+        console.error("Error occured", error);
+    }
+};
+
 export {
     GetAllOrders,
     GetOrder,
@@ -96,5 +116,7 @@ export {
     OrderStatus,
     AssignOrderDriver,
     AssignOrderAdmin,
-    GetMyOrders
+    GetMyOrders,
+    GetActiveOrder,
+    OrderDomainToDtoMapper
 }

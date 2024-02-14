@@ -21,12 +21,16 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Integer> {
             "END AS org.database.backend.models.enums.Role), " +
             "COALESCE(m.id, a.id, p.id, v.id ), " +
             "p.address, " +
-            "p.phoneNumber) " +
+            "p.phoneNumber," +
+            "COALESCE(r.id, n.id) ) " +
             "FROM Korisnik k " +
             "LEFT JOIN Manager m ON k.id = m.korisnik.id " +
             "LEFT JOIN Administrator a ON a.korisnik.id = k.id " +
             "LEFT JOIN Potrosuvac p ON p.korisnik.id = k.id " +
             "LEFT JOIN Vozac v ON v.korisnik.id = k.id " +
+            "LEFT JOIN Restoran r ON r.manager.id = m.id " +
+            "LEFT JOIN Naracka n ON n.potrosuvac.id = p.id " +
+            "AND n.status = org.database.backend.models.enums.OrderStatus.PendingUserApproval " +
             "WHERE k.username = :username")
     Optional<CustomUserDetails> findByUsername(String username);
 
@@ -41,12 +45,16 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Integer> {
             "END AS org.database.backend.models.enums.Role), " +
             "COALESCE(m.id, a.id, p.id, v.id ), " +
             "p.address, " +
-            "p.phoneNumber) " +
+            "p.phoneNumber," +
+            "COALESCE(r.id, n.id) ) " +
             "FROM Korisnik k " +
             "LEFT JOIN Manager m ON k.id = m.korisnik.id " +
             "LEFT JOIN Administrator a ON a.korisnik.id = k.id " +
             "LEFT JOIN Potrosuvac p ON p.korisnik.id = k.id " +
             "LEFT JOIN Vozac v ON v.korisnik.id = k.id " +
+            "LEFT JOIN Restoran r ON r.manager.id = m.id " +
+            "LEFT JOIN Naracka n ON n.potrosuvac.id = p.id " +
+            "AND n.status = org.database.backend.models.enums.OrderStatus.PendingUserApproval " +
             "WHERE k.id = :id")
     Optional<CustomUserDetails> findUserById(Integer id);
 }

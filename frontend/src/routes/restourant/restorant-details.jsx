@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useAuthContext} from "../../configurations/AuthContext";
 import {Button, Grid, Typography} from "@mui/material";
 import {useLoaderData, useLocation, useNavigate} from "react-router-dom";
 import EditRestorantModal from "../../components/modals/restorant-modal";
 import CreateEditMenuItemModal from "../../components/modals/menu-item-modal";
 import MenuItemCard from "../../components/cards/menu-item-card";
-import {CreateOrder, GetOrder, OrderStatus} from "../../services/order-service";
+import {CreateOrder, GetOrder, OrderDomainToDtoMapper, OrderStatus, UpdateOrder} from "../../services/order-service";
 import {UserRole} from "../../services/user-service";
 import {ShoppingCart} from "@mui/icons-material";
 import RestaurantPhoto from "../../assets/images/restoran.png";
@@ -13,21 +13,23 @@ import PaymentModal from "../../components/modals/payment-modal";
 
 
 const RestorantDetails = ({id}) => {
-    const {isAuthorized, loggedUserRole} = useAuthContext();
+    const {isAuthorized, loggedUserRole, ownershipChanges} = useAuthContext();
+    const {restorant, activeOrder} = useLoaderData();
+
     const [openUpdateModal, setOpenUpdateModal] = useState(false);
     const [openMenuItemModal, setOpenMenuItemModal] = useState(false);
     const [openPaymentModal, setOpenPaymentModal] = useState(false);
-    const {restorant} = useLoaderData();
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [savedOrder, setSavedOrder] = useState(null)
-
-    const [naracka, setNaracka] = useState({
+    let initialStateNaracka = {
         potrosuvacId: loggedUserRole?.roleId,
         status: OrderStatus.PendingUserApproval,
         menuItems: []
-    })
+    }
+
+    const [naracka, setNaracka] = useState(OrderDomainToDtoMapper(activeOrder) ?? initialStateNaracka)
+    const [activeOrderForPayment, setActiveOrderForPayment] = useState(activeOrder)
 
     const handleAddRemoveToNaracka = async (menuItem) => {
         const existingMenuItem = naracka.menuItems.find(item => item.menuItemId === menuItem.menuItemId);
@@ -53,13 +55,24 @@ const RestorantDetails = ({id}) => {
     };
 
     const handleNarackaSubmit = async (status) => {
-
         setNaracka({...naracka, [status]: status});
+
+        if (loggedUserRole.activeOwnershipId && activeOrder) {
+            await UpdateOrder(activeOrder.id, naracka);
+
+            if (status === OrderStatus.PendingAdminApproval) {
+                setOpenPaymentModal(true);
+            }
+
+            return;
+        }
+
         let orderId = await CreateOrder(naracka);
+        ownershipChanges(orderId);
 
         if (status === OrderStatus.PendingAdminApproval) {
             let order = await GetOrder(orderId);
-            setSavedOrder(order);
+            setActiveOrderForPayment(order);
             setOpenPaymentModal(true);
         } else {
             navigate(0);
@@ -101,7 +114,7 @@ const RestorantDetails = ({id}) => {
                         </Typography>
                     </Grid>
                     <Grid container direction={'row'}>
-                        {loggedUserRole?.role === UserRole.Potrosuvac && naracka.menuItems.length > 0 && naracka.menuItems.some(x => x.quantity > 0) &&
+                        {loggedUserRole?.role === UserRole.Potrosuvac && naracka.menuItems?.length > 0 && naracka.menuItems?.some(x => x.quantity > 0) &&
                             < >
                                 < Button onClick={() => handleNarackaSubmit(OrderStatus.PendingUserApproval)}>Add to
                                     Cart <ShoppingCart/> </Button>
@@ -109,7 +122,7 @@ const RestorantDetails = ({id}) => {
                                     Order</Button>
                             </>}
 
-                        {isAuthorized(restorant?.manager?.id) &&
+                        {(isAuthorized(restorant?.manager?.id) || loggedUserRole?.role === UserRole.Admin) &&
                             <Grid>
                                 <Button onClick={() => setOpenUpdateModal(true)}>
                                     Update Restorant
@@ -128,7 +141,10 @@ const RestorantDetails = ({id}) => {
                 restorant.menuItems.length > 0 &&
                 restorant.menuItems.map((menuItem) => (
                     <Grid key={menuItem.id} item xs={12} md={6} lg={6}>
-                        <MenuItemCard item={menuItem} restorant={restorant} itemchange={handleAddRemoveToNaracka}/>
+                        <MenuItemCard item={menuItem}
+                                      quantitynb={naracka.menuItems?.find(x => x.menuItemId === menuItem.id)?.quantity}
+                                      restorant={restorant}
+                                      itemchange={handleAddRemoveToNaracka}/>
                     </Grid>
                 ))
             }
@@ -147,7 +163,7 @@ const RestorantDetails = ({id}) => {
 
             {
                 openPaymentModal &&
-                <PaymentModal naracka={savedOrder} open={openPaymentModal}
+                <PaymentModal naracka={activeOrderForPayment} open={openPaymentModal}
                               onClose={() => {
                                   setOpenPaymentModal(false);
                                   navigate(0);

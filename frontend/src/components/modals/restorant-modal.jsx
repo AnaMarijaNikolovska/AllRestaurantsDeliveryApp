@@ -15,7 +15,7 @@ const EditRestorantModal = ({restorant, ...props}) => {
         >
             <DialogTitle variant="h4" disabletypography="true" id={"choose-role-title"}
                          className={"text-center font-weight-bolder"}>
-                Edit Restorant
+                Edit Restourant
                 <IconButton className={"float-end"} aria-label="close" onClick={() => props.onClose()}>
                     <CloseIcon/>
                 </IconButton>
